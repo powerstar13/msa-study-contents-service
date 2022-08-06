@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 @Repository
-public interface MemberRepository extends ReactiveCrudRepository<Member, Integer> {
+public interface MemberRepository extends ReactiveCrudRepository<Member, Long> {
 
     Mono<Member> findByMemberToken(String memberToken);
 }

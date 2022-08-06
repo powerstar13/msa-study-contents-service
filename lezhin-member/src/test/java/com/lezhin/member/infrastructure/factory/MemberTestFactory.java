@@ -4,7 +4,7 @@ import com.lezhin.member.domain.Member;
 import com.lezhin.member.domain.MemberGender;
 import com.lezhin.member.domain.MemberType;
 import com.lezhin.member.domain.dto.MemberDTO;
-import com.lezhin.member.prensentation.response.ExchangeMemberTokenResponse;
+import com.lezhin.member.presentation.response.ExchangeMemberTokenResponse;
 import org.apache.commons.lang3.RandomUtils;
 import reactor.core.publisher.Mono;
 
@@ -25,7 +25,7 @@ public class MemberTestFactory {
     public static Member member() {
 
         return Member.builder()
-            .memberId(RandomUtils.nextInt())
+            .memberId(RandomUtils.nextLong())
             .memberToken(memberToken)
             .memberType(memberType)
             .memberEmail(memberEmail)
@@ -45,7 +45,7 @@ public class MemberTestFactory {
     public static MemberDTO.MemberIdInfo memberIdInfo() {
 
         return MemberDTO.MemberIdInfo.builder()
-            .memberId(RandomUtils.nextInt())
+            .memberId(RandomUtils.nextLong())
             .build();
     }
 
@@ -56,7 +56,7 @@ public class MemberTestFactory {
     public static ExchangeMemberTokenResponse exchangeMemberTokenResponse() {
 
         return ExchangeMemberTokenResponse.builder()
-            .memberId(RandomUtils.nextInt())
+            .memberId(RandomUtils.nextLong())
             .build();
     }
 }

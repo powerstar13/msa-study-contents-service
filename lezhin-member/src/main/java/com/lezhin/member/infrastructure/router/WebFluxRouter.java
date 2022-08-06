@@ -1,6 +1,6 @@
 package com.lezhin.member.infrastructure.router;
 
-import com.lezhin.member.prensentation.MemberHandler;
+import com.lezhin.member.presentation.MemberHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
