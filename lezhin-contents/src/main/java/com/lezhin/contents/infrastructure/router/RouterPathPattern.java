@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum RouterPathPattern {
 
     CONTENTS_ROOT("/contents", "/contents/**"),
-    CONTENTS_EVALUATION_REGISTER("/evaluation-register", "/contents/evaluation-register");
+    CONTENTS_EVALUATION_REGISTER("/evaluation-register", "/contents/evaluation-register"),
+    EVALUATION_TOP3_CONTENTS("/evaluation-top3", "/contents/evaluation-top3");
 
     private final String path;
     private final String fullPath;

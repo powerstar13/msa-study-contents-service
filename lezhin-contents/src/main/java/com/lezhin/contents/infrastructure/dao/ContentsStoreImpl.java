@@ -1,7 +1,9 @@
 package com.lezhin.contents.infrastructure.dao;
 
 import com.lezhin.contents.application.dto.ContentsCommand;
+import com.lezhin.contents.domain.Contents;
 import com.lezhin.contents.domain.Evaluation;
+import com.lezhin.contents.domain.EvaluationType;
 import com.lezhin.contents.domain.service.ContentsStore;
 import com.lezhin.contents.infrastructure.exception.status.ExceptionMessage;
 import com.lezhin.contents.infrastructure.exception.status.RegisterFailException;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ContentsStoreImpl implements ContentsStore {
 
+    private final ContentsRepository contentsRepository;
     private final EvaluationRepository evaluationRepository;
 
     /**
@@ -23,9 +26,16 @@ public class ContentsStoreImpl implements ContentsStore {
      * @return Evaluation: 평가 레퍼런스
      */
     @Override
-    public Mono<Evaluation> evaluationRegister(ContentsCommand.ExchangedContentsIdForEvaluationRegister command) {
+    public Mono<Evaluation> evaluationRegister(Contents contents, ContentsCommand.ExchangedContentsIdForEvaluationRegister command) {
 
         return evaluationRepository.save(command.toEntity()) // 평가 등록
-            .switchIfEmpty(Mono.error(new RegisterFailException(ExceptionMessage.RegisterFailEvaluation.getMessage())));
+            .switchIfEmpty(Mono.error(new RegisterFailException(ExceptionMessage.RegisterFailEvaluation.getMessage())))
+            .flatMap(evaluation -> {
+                if (command.getEvaluationType().equals(EvaluationType.LIKE)) contents.likeUp(); // 좋아요 추가
+                else contents.dislikeUp(); // 싫어요 추가
+
+                return contentsRepository.save(contents)
+                    .then(Mono.just(evaluation));
+            });
     }
 }

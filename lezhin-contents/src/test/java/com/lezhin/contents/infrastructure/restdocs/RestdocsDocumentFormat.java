@@ -43,4 +43,8 @@ public class RestdocsDocumentFormat {
     public static Attributes.Attribute commentFormat() {
         return setFormat("댓글에 특수문자는 불가");
     }
+
+    public static Attributes.Attribute yyyyMMddFormat() {
+        return setFormat("yyyy-MM-dd");
+    }
 }

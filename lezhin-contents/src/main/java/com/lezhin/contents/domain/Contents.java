@@ -45,6 +45,26 @@ public class Contents extends CommonDateEntity { // 작품
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate openAt; // 서비스 제공일
 
+    @Column(value = "likeCount")
+    private long likeCount; // 좋아요 개수
+
+    @Column(value = "dislikeCount")
+    private long dislikeCount; // 싫어요 개수
+
+    /**
+     * 좋아요 추가
+     */
+    public void likeUp() {
+        this.likeCount += 1;
+    }
+
+    /**
+     * 싫어요 추가
+     */
+    public void dislikeUp() {
+        this.dislikeCount += 1;
+    }
+
     @Override
     public String toString() {
         return "{"
@@ -57,6 +77,8 @@ public class Contents extends CommonDateEntity { // 작품
             + ", \"coin\":" + coin
             + ", \"adultOnly\":\"" + adultOnly + "\""
             + ", \"openAt\":" + openAt
+            + ", \"likeCount\":" + likeCount
+            + ", \"dislikeCount\":" + dislikeCount
             + "}";
     }
 }

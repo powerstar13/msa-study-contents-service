@@ -13,4 +13,6 @@ import org.mapstruct.ReportingPolicy;
 public interface ContentsResponseMapper {
 
     EvaluationRegisterResponse of(ContentsDTO.EvaluationTokenInfo evaluationTokenInfo);
+
+    EvaluationTop3ContentsResponse of(ContentsDTO.EvaluationTop3Contents evaluationTop3Contents);
 }

@@ -8,6 +8,7 @@ import com.lezhin.contents.presentation.request.ContentsRequestMapper;
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
 import com.lezhin.contents.presentation.response.ContentsResponseMapper;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
+import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
 import com.lezhin.contents.presentation.shared.WebFluxSharedHandlerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.test.StepVerifier;
 
 import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.*;
-import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentFormat.commentFormat;
-import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentFormat.evaluationTypeFormat;
+import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentFormat.*;
 import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentUtil.requestPrettyPrint;
 import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentUtil.responsePrettyPrint;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +32,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
 @WebFluxTest(ContentsHandler.class)
@@ -73,7 +75,7 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
                 responsePrettyPrint(),
                 requestFields(
                     fieldWithPath("memberToken").type(JsonFieldType.STRING).description("회원 대체 식별키"),
-                    fieldWithPath("contentsToken").type(JsonFieldType.STRING).description("회원 대체 식별키"),
+                    fieldWithPath("contentsToken").type(JsonFieldType.STRING).description("작품 대체 식별키"),
                     fieldWithPath("evaluationType").type(JsonFieldType.STRING).description("평가 유형").attributes(evaluationTypeFormat()),
                     fieldWithPath("comment").type(JsonFieldType.STRING).description("댓글").attributes(commentFormat()).optional()
                 ),
@@ -95,6 +97,66 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
             .assertNext(response -> assertAll(() -> {
                 assertEquals(HttpStatus.CREATED.value(), response.getRt());
                 assertInstanceOf(String.class, response.getEvaluationToken());
+            }))
+            .verifyComplete();
+    }
+
+    @DisplayName("아요/싫어요 Top3 작품 조회")
+    @Test
+    void evaluationTop3Contents() {
+        // given
+        given(contentsFacade.evaluationTop3Contents()).willReturn(evaluationTop3ContentsDTOMono());
+        given(contentsResponseMapper.of(any(ContentsDTO.EvaluationTop3Contents.class))).willReturn(evaluationTop3ContentsResponse());
+
+        // when
+        final String URI = RouterPathPattern.EVALUATION_TOP3_CONTENTS.getFullPath();
+        WebTestClient.ResponseSpec result = webClient
+            .get()
+            .uri(URI)
+            .header(AUTHORIZATION, "accessToken")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange();
+
+        result.expectStatus().isOk()
+            .expectBody()
+            .consumeWith(document(URI,
+                requestPrettyPrint(),
+                responsePrettyPrint(),
+                requestParameters(
+                ),
+                responseFields(
+                    fieldWithPath("rt").type(JsonFieldType.NUMBER).description("결과 코드"),
+                    fieldWithPath("rtMsg").type(JsonFieldType.STRING).description("결과 메시지"),
+                    fieldWithPath("likeTop3Contents[]").type(JsonFieldType.ARRAY).description("좋아요 Top3 작품 목록"),
+                    fieldWithPath("likeTop3Contents[].contentsToken").type(JsonFieldType.STRING).description("작품 대체 식별키"),
+                    fieldWithPath("likeTop3Contents[].contentsName").type(JsonFieldType.STRING).description("작품명"),
+                    fieldWithPath("likeTop3Contents[].author").type(JsonFieldType.STRING).description("작가"),
+                    fieldWithPath("likeTop3Contents[].pricingType").type(JsonFieldType.STRING).description("가격 유형").attributes(pricingTypeFormat()),
+                    fieldWithPath("likeTop3Contents[].coin").type(JsonFieldType.NUMBER).description("금액"),
+                    fieldWithPath("likeTop3Contents[].adultOnly").type(JsonFieldType.STRING).description("성인물 여부").attributes(adultOnlyFormat()),
+                    fieldWithPath("likeTop3Contents[].openAt").type(JsonFieldType.STRING).description("서비스 제공일").attributes(yyyyMMddFormat()),
+                    fieldWithPath("dislikeTop3Contents[]").type(JsonFieldType.ARRAY).description("싫어요 Top3 작품 목록"),
+                    fieldWithPath("dislikeTop3Contents[].contentsToken").type(JsonFieldType.STRING).description("작품 대체 식별키"),
+                    fieldWithPath("dislikeTop3Contents[].contentsName").type(JsonFieldType.STRING).description("작품명"),
+                    fieldWithPath("dislikeTop3Contents[].author").type(JsonFieldType.STRING).description("작가"),
+                    fieldWithPath("dislikeTop3Contents[].pricingType").type(JsonFieldType.STRING).description("가격 유형").attributes(pricingTypeFormat()),
+                    fieldWithPath("dislikeTop3Contents[].coin").type(JsonFieldType.NUMBER).description("금액"),
+                    fieldWithPath("dislikeTop3Contents[].adultOnly").type(JsonFieldType.STRING).description("성인물 여부").attributes(adultOnlyFormat()),
+                    fieldWithPath("dislikeTop3Contents[].openAt").type(JsonFieldType.STRING).description("서비스 제공일").attributes(yyyyMMddFormat())
+                )
+            ));
+
+        FluxExchangeResult<EvaluationTop3ContentsResponse> flux = result.returnResult(EvaluationTop3ContentsResponse.class);
+
+        // then
+        verify(contentsFacade).evaluationTop3Contents();
+        verify(contentsResponseMapper).of(any(ContentsDTO.EvaluationTop3Contents.class));
+
+        StepVerifier.create(flux.getResponseBody().log())
+            .assertNext(response -> assertAll(() -> {
+                assertEquals(HttpStatus.OK.value(), response.getRt());
+                assertEquals(3, response.getLikeTop3Contents().size());
+                assertEquals(3, response.getDislikeTop3Contents().size());
             }))
             .verifyComplete();
     }

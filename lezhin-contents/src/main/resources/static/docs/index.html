@@ -454,6 +454,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response">Response</a></li>
 </ul>
 </li>
+<li><a href="#evaluation-top3">좋아요/싫어요 Top3 작품 조회</a>
+<ul class="sectlevel2">
+<li><a href="#_http_2">Http</a></li>
+<li><a href="#_request_2">Request</a></li>
+<li><a href="#_response_2">Response</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -479,8 +486,8 @@ Content-Length: 178
 Host: localhost:8080
 
 {
-  "memberToken" : "833022e2-4c99-49ce-8ba2-e09f61f1ada1",
-  "contentsToken" : "686310a7-5806-4f9f-9102-5ca81ecb361a",
+  "memberToken" : "ae184a6e-37b0-4fe6-978a-40536d957ed2",
+  "contentsToken" : "e9703a5e-5960-4f10-bc29-5b1295284eca",
   "evaluationType" : "LIKE",
   "comment" : "댓글"
 }</code></pre>
@@ -519,7 +526,7 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 대체 식별키</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작품 대체 식별키</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">evaluationType</p></td>
@@ -586,7 +593,249 @@ Host: localhost:8080
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "rt" : 201,
   "rtMsg" : "Created",
-  "evaluationToken" : "e9a9bda4-5cc7-4202-886f-b33edc99808c"
+  "evaluationToken" : "0f9df45e-e64b-4ab0-aafd-99510fe577d6"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="evaluation-top3"><a class="link" href="#evaluation-top3">좋아요/싫어요 Top3 작품 조회</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_http_2"><a class="link" href="#_http_2">Http</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /contents/evaluation-top3 HTTP/1.1
+Authorization: accessToken
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_request_2"><a class="link" href="#_request_2">Request</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">필수값</th>
+<th class="tableblock halign-left valign-top">양식</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_response_2"><a class="link" href="#_response_2">Response</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수값</th>
+<th class="tableblock halign-left valign-top">양식</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rtMsg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요 Top3 작품 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[].contentsToken</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작품 대체 식별키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[].contentsName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작품명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[].author</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작가</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[].pricingType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FREE: 무료, PAY: 유료</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가격 유형</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[].coin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">금액</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[].adultOnly</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y: 예, N: 아니요</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성인물 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">likeTop3Contents[].openAt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">서비스 제공일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">싫어요 Top3 작품 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[].contentsToken</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작품 대체 식별키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[].contentsName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작품명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[].author</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작가</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[].pricingType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FREE: 무료, PAY: 유료</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가격 유형</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[].coin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">금액</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[].adultOnly</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Y: 예, N: 아니요</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성인물 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dislikeTop3Contents[].openAt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">서비스 제공일</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "rt" : 200,
+  "rtMsg" : "OK",
+  "likeTop3Contents" : [ {
+    "contentsToken" : "3af68445-4406-4a71-88d1-f0a5a28dc806",
+    "contentsName" : "작품명",
+    "author" : "작가",
+    "pricingType" : "FREE",
+    "coin" : 0,
+    "adultOnly" : "N",
+    "openAt" : "2022-08-06"
+  }, {
+    "contentsToken" : "ebbe596e-2355-4e17-8033-965bdc7a180f",
+    "contentsName" : "작품명",
+    "author" : "작가",
+    "pricingType" : "FREE",
+    "coin" : 0,
+    "adultOnly" : "N",
+    "openAt" : "2022-08-06"
+  }, {
+    "contentsToken" : "70ac2f3b-5278-4130-b587-f8d10356e20e",
+    "contentsName" : "작품명",
+    "author" : "작가",
+    "pricingType" : "FREE",
+    "coin" : 0,
+    "adultOnly" : "N",
+    "openAt" : "2022-08-06"
+  } ],
+  "dislikeTop3Contents" : [ {
+    "contentsToken" : "afa43237-d05f-405d-9e92-0ac2f0ed82de",
+    "contentsName" : "작품명",
+    "author" : "작가",
+    "pricingType" : "FREE",
+    "coin" : 0,
+    "adultOnly" : "N",
+    "openAt" : "2022-08-06"
+  }, {
+    "contentsToken" : "f1a7d5b2-e14e-4348-b038-437f6d414ff8",
+    "contentsName" : "작품명",
+    "author" : "작가",
+    "pricingType" : "FREE",
+    "coin" : 0,
+    "adultOnly" : "N",
+    "openAt" : "2022-08-06"
+  }, {
+    "contentsToken" : "10e9fd7a-b5c2-4ef1-bcca-883e8cc4eaad",
+    "contentsName" : "작품명",
+    "author" : "작가",
+    "pricingType" : "FREE",
+    "coin" : 0,
+    "adultOnly" : "N",
+    "openAt" : "2022-08-06"
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -597,7 +846,7 @@ Host: localhost:8080
 <div id="footer">
 <div id="footer-text">
 Version <br>
-Last updated 2022-08-06 14:27:13 +0900
+Last updated 2022-08-06 23:41:16 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

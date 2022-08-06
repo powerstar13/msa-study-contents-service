@@ -2,6 +2,8 @@ package com.lezhin.contents.domain.service;
 
 import com.lezhin.contents.application.dto.ContentsCommand;
 import com.lezhin.contents.domain.Contents;
+import com.lezhin.contents.domain.service.dto.ContentsDTO;
+import com.lezhin.contents.domain.service.dto.ContentsDTOMapper;
 import com.lezhin.contents.infrastructure.dao.ContentsRepository;
 import com.lezhin.contents.infrastructure.dao.EvaluationRepository;
 import com.lezhin.contents.infrastructure.exception.status.AlreadyDataException;
@@ -17,8 +19,9 @@ import reactor.test.StepVerifier;
 import java.util.UUID;
 
 import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -32,6 +35,8 @@ class ContentsReaderTest {
     private ContentsRepository contentsRepository;
     @MockBean
     private EvaluationRepository evaluationRepository;
+    @MockBean
+    private ContentsDTOMapper contentsDTOMapper;
 
     @DisplayName("작품 정보 조회")
     @Test
@@ -39,11 +44,11 @@ class ContentsReaderTest {
 
         given(contentsRepository.findByContentsToken(anyString())).willReturn(contentsMono());
 
-        Mono<Contents> contentsMono = contentsReader.findByContentsToken(UUID.randomUUID().toString());
+        Mono<Contents> result = contentsReader.findByContentsToken(UUID.randomUUID().toString());
 
         verify(contentsRepository).findByContentsToken(anyString());
 
-        StepVerifier.create(contentsMono.log())
+        StepVerifier.create(result.log())
             .assertNext(Assertions::assertNotNull)
             .verifyComplete();
     }
@@ -55,11 +60,11 @@ class ContentsReaderTest {
 
         given(evaluationRepository.findByMemberIdAndContentsId(anyLong(), anyLong())).willReturn(Mono.empty());
 
-        Mono<Void> voidMono = contentsReader.evaluationExistCheck(command);
+        Mono<Void> result = contentsReader.evaluationExistCheck(command);
 
         verify(evaluationRepository).findByMemberIdAndContentsId(anyLong(), anyLong());
 
-        StepVerifier.create(voidMono.log())
+        StepVerifier.create(result.log())
             .expectNextCount(0)
             .verifyComplete();
     }
@@ -71,12 +76,33 @@ class ContentsReaderTest {
 
         given(evaluationRepository.findByMemberIdAndContentsId(anyLong(), anyLong())).willReturn(evaluationMono());
 
-        Mono<Void> voidMono = contentsReader.evaluationExistCheck(command);
+        Mono<Void> result = contentsReader.evaluationExistCheck(command);
 
         verify(evaluationRepository).findByMemberIdAndContentsId(anyLong(), anyLong());
 
-        StepVerifier.create(voidMono.log())
+        StepVerifier.create(result.log())
             .expectError(AlreadyDataException.class)
             .verify();
+    }
+
+    @DisplayName("좋아요/싫어요 Top3 작품 조회")
+    @Test
+    void evaluationTop3Contents() {
+
+        given(contentsRepository.findTop3ByLikeCountGreaterThanOrderByLikeCountDesc(anyLong())).willReturn(likeTop3ContentsFlux());
+        given(contentsRepository.findTop3ByDislikeCountGreaterThanOrderByDislikeCountDesc(anyLong())).willReturn(dislikeTop3ContentsFlux());
+        given(contentsDTOMapper.of(anyList(), anyList())).willReturn(evaluationTop3ContentsDTO());
+
+        Mono<ContentsDTO.EvaluationTop3Contents> result = contentsReader.evaluationTop3Contents();
+
+        verify(contentsRepository).findTop3ByLikeCountGreaterThanOrderByLikeCountDesc(anyLong());
+        verify(contentsRepository).findTop3ByDislikeCountGreaterThanOrderByDislikeCountDesc(anyLong());
+
+        StepVerifier.create(result.log())
+            .assertNext(evaluationTop3Contents -> assertAll(() -> {
+                assertEquals(3, evaluationTop3Contents.getLikeTop3Contents().size());
+                assertEquals(3, evaluationTop3Contents.getDislikeTop3Contents().size());
+            }))
+            .verifyComplete();
     }
 }

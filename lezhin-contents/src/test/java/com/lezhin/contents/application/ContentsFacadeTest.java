@@ -14,7 +14,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -41,12 +42,30 @@ class ContentsFacadeTest {
         given(contentsCommandMapper.of(anyLong(), any(ContentsCommand.EvaluationRegister.class))).willReturn(exchangedMemberIdForEvaluationRegisterCommand());
         given(contentsService.evaluationRegister(any(ContentsCommand.ExchangedMemberIdForEvaluationRegister.class))).willReturn(evaluationTokenInfoDTOMono());
 
-        Mono<ContentsDTO.EvaluationTokenInfo> evaluationTokenInfoMono = contentsFacade.evaluationRegister(command);
+        Mono<ContentsDTO.EvaluationTokenInfo> result = contentsFacade.evaluationRegister(command);
 
         verify(memberWebClientService).exchangeMemberToken(anyString());
 
-        StepVerifier.create(evaluationTokenInfoMono.log())
+        StepVerifier.create(result.log())
             .assertNext(evaluationTokenInfo -> assertNotNull(evaluationTokenInfo.getEvaluationToken()))
+            .verifyComplete();
+    }
+
+    @DisplayName("좋아요/싫어요 Top3 작품 조회")
+    @Test
+    void evaluationTop3Contents() {
+
+        given(contentsService.evaluationTop3Contents()).willReturn(evaluationTop3ContentsDTOMono());
+
+        Mono<ContentsDTO.EvaluationTop3Contents> result = contentsFacade.evaluationTop3Contents();
+
+        verify(contentsService).evaluationTop3Contents();
+
+        StepVerifier.create(result.log())
+            .assertNext(evaluationTop3Contents -> assertAll(() -> {
+                assertEquals(3, evaluationTop3Contents.getLikeTop3Contents().size());
+                assertEquals(3, evaluationTop3Contents.getDislikeTop3Contents().size());
+            }))
             .verifyComplete();
     }
 }

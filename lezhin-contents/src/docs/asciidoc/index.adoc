@@ -30,3 +30,13 @@ include::{snippets}/contents/evaluation-register/request-fields.adoc[]
 === Response
 include::{snippets}/contents/evaluation-register/response-fields.adoc[]
 include::{snippets}/contents/evaluation-register/response-body.adoc[]
+
+[[evaluation-top3]]
+== 좋아요/싫어요 Top3 작품 조회
+=== Http
+include::{snippets}/contents/evaluation-top3/http-request.adoc[]
+=== Request
+include::{snippets}/contents/evaluation-top3/request-parameters.adoc[]
+=== Response
+include::{snippets}/contents/evaluation-top3/response-fields.adoc[]
+include::{snippets}/contents/evaluation-top3/response-body.adoc[]

@@ -7,6 +7,7 @@ import com.lezhin.contents.presentation.request.ContentsRequestMapper;
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
 import com.lezhin.contents.presentation.response.ContentsResponseMapper;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
+import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -42,5 +43,18 @@ public class ContentsHandler {
 
         return ok().contentType(MediaType.APPLICATION_JSON)
             .body(response, EvaluationRegisterResponse.class);
+    }
+
+    /**
+     * 좋아요/싫어요 Top3 작품 조회
+     * @return ServerResponse: 좋아요/싫어요 Top3 작품 정보
+     */
+    public Mono<ServerResponse> evaluationTop3Contents(ServerRequest serverRequest) {
+
+        Mono<EvaluationTop3ContentsResponse> response = contentsFacade.evaluationTop3Contents()
+            .flatMap(evaluationTop3Contents -> Mono.just(contentsResponseMapper.of(evaluationTop3Contents)));
+
+        return ok().contentType(MediaType.APPLICATION_JSON)
+            .body(response, EvaluationTop3ContentsResponse.class);
     }
 }

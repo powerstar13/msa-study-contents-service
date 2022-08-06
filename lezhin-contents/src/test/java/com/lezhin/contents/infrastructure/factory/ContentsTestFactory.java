@@ -6,11 +6,16 @@ import com.lezhin.contents.domain.service.dto.ContentsDTO;
 import com.lezhin.contents.infrastructure.webClient.response.ExchangeMemberTokenResponse;
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
+import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
+import com.lezhin.contents.presentation.response.dto.ContentsResponseDTO;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.http.HttpStatus;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class ContentsTestFactory {
@@ -26,7 +31,7 @@ public class ContentsTestFactory {
     /**
      * 작품 정보
      */
-    public static Contents contents() {
+    public static Contents contents(long likeCount, long dislikeCount) {
 
         return Contents.builder()
             .contentsId(RandomUtils.nextLong())
@@ -37,11 +42,13 @@ public class ContentsTestFactory {
             .coin(coin)
             .adultOnly(adultOnly)
             .openAt(LocalDate.now())
+            .likeCount(likeCount)
+            .dislikeCount(dislikeCount)
             .build();
     }
 
     public static Mono<Contents> contentsMono() {
-        return Mono.just(contents());
+        return Mono.just(contents(0, 0));
     }
 
     /**
@@ -140,6 +147,81 @@ public class ContentsTestFactory {
 
         return EvaluationRegisterResponse.builder()
             .evaluationToken(UUID.randomUUID().toString())
+            .build();
+    }
+
+    public static Flux<Contents> likeTop3ContentsFlux() {
+
+        return Flux.just(
+            contents(3, 0),
+            contents(2, 0),
+            contents(1, 0)
+        );
+    }
+
+    public static Flux<Contents> dislikeTop3ContentsFlux() {
+
+        return Flux.just(
+            contents(0, 3),
+            contents(0, 2),
+            contents(0, 1)
+        );
+    }
+
+    public static ContentsDTO.ContentsInfo contentsInfoDTO() {
+
+        return ContentsDTO.ContentsInfo.builder()
+            .contentsToken(UUID.randomUUID().toString())
+            .contentsName(contentsName)
+            .author(author)
+            .pricingType(pricingType)
+            .coin(coin)
+            .adultOnly(adultOnly)
+            .openAt(LocalDate.now())
+            .build();
+    }
+
+    public static List<ContentsDTO.ContentsInfo> contentsInfoDTOList() {
+        return Arrays.asList(contentsInfoDTO(), contentsInfoDTO(), contentsInfoDTO());
+    }
+
+    public static ContentsDTO.EvaluationTop3Contents evaluationTop3ContentsDTO() {
+
+        return ContentsDTO.EvaluationTop3Contents.builder()
+            .likeTop3Contents(contentsInfoDTOList())
+            .dislikeTop3Contents(contentsInfoDTOList())
+            .build();
+    }
+
+    public static Mono<ContentsDTO.EvaluationTop3Contents> evaluationTop3ContentsDTOMono() {
+        return Mono.just(evaluationTop3ContentsDTO());
+    }
+
+    public static ContentsResponseDTO.ContentsInfo contentsInfoResponseDTO() {
+
+        return ContentsResponseDTO.ContentsInfo.builder()
+            .contentsToken(UUID.randomUUID().toString())
+            .contentsName(contentsName)
+            .author(author)
+            .pricingType(pricingType)
+            .coin(coin)
+            .adultOnly(adultOnly)
+            .openAt(LocalDate.now())
+            .build();
+    }
+
+    public static List<ContentsResponseDTO.ContentsInfo> contentsInfoResponseDTOList() {
+        return Arrays.asList(contentsInfoResponseDTO(), contentsInfoResponseDTO(), contentsInfoResponseDTO());
+    }
+
+    /**
+     * 좋아요/싫어요 Top3 작품 조회 Response
+     */
+    public static EvaluationTop3ContentsResponse evaluationTop3ContentsResponse() {
+
+        return EvaluationTop3ContentsResponse.builder()
+            .likeTop3Contents(contentsInfoResponseDTOList())
+            .dislikeTop3Contents(contentsInfoResponseDTOList())
             .build();
     }
 }

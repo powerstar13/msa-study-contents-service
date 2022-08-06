@@ -1,7 +1,9 @@
 package com.lezhin.contents.domain.service;
 
 import com.lezhin.contents.application.dto.ContentsCommand;
+import com.lezhin.contents.domain.Contents;
 import com.lezhin.contents.domain.Evaluation;
+import com.lezhin.contents.infrastructure.dao.ContentsRepository;
 import com.lezhin.contents.infrastructure.dao.EvaluationRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.evaluationMono;
-import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.exchangedContentsIdForEvaluationRegisterCommand;
+import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -25,6 +26,8 @@ class ContentsStoreTest {
     private ContentsStore contentsStore;
 
     @MockBean
+    private ContentsRepository contentsRepository;
+    @MockBean
     private EvaluationRepository evaluationRepository;
 
     @DisplayName("평가 등록")
@@ -33,12 +36,13 @@ class ContentsStoreTest {
         ContentsCommand.ExchangedContentsIdForEvaluationRegister command = exchangedContentsIdForEvaluationRegisterCommand();
 
         given(evaluationRepository.save(any(Evaluation.class))).willReturn(evaluationMono());
+        given(contentsRepository.save(any(Contents.class))).willReturn(contentsMono());
 
-        Mono<Evaluation> evaluationMono = contentsStore.evaluationRegister(command);
+        Mono<Evaluation> result = contentsStore.evaluationRegister(contents(0, 0), command);
 
         verify(evaluationRepository).save(any(Evaluation.class));
 
-        StepVerifier.create(evaluationMono.log())
+        StepVerifier.create(result.log())
             .assertNext(Assertions::assertNotNull)
             .verifyComplete();
     }
