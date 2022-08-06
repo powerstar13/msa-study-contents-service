@@ -1,1 +1,14 @@
 # 웹툰 서비스 플랫폼 API Test
+
+### 평가 등록
+POST http://localhost:8080/contents/evaluation-register
+Content-Type: application/json
+Accept: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIyZi05MzkwLTFiMGMyMjA2YmNiZSIsImlhdCI6MTY1OTc2NDY4NywiZXhwIjoyNjA1ODQ0Njg3fQ.d82eq4XecwOczhNFmay9bQ6N9IXjXAE_1wlg7Ox_dTc
+
+{
+  "memberToken": "108358d3-72cc-47eb-8fb2-d1635c95ab13",
+  "contentsToken": "4ff3f414-7a5e-4ce1-8234-76788b5eff13",
+  "evaluationType": "LIKE",
+  "comment": "댓글"
+}
