@@ -33,11 +33,11 @@ class MemberFacadeTest {
 
         given(memberService.exchangeMemberToken(any(String.class))).willReturn(memberIdInfoMono());
 
-        Mono<MemberDTO.MemberIdInfo> memberIdInfoMono = memberFacade.exchangeMemberToken(UUID.randomUUID().toString());
+        Mono<MemberDTO.MemberIdInfo> result = memberFacade.exchangeMemberToken(UUID.randomUUID().toString());
 
         verify(memberService).exchangeMemberToken(any(String.class));
 
-        StepVerifier.create(memberIdInfoMono.log())
+        StepVerifier.create(result.log())
             .assertNext(memberIdInfo -> assertTrue(memberIdInfo.getMemberId() > 0))
             .verifyComplete();
     }

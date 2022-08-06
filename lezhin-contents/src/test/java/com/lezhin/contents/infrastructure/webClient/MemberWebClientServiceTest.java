@@ -61,9 +61,9 @@ class MemberWebClientServiceTest {
             .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         );
 
-        Mono<ExchangeMemberTokenResponse> callExchangeMemberTokenResponseMono = memberWebClientService.exchangeMemberToken(UUID.randomUUID().toString());
+        Mono<ExchangeMemberTokenResponse> result = memberWebClientService.exchangeMemberToken(UUID.randomUUID().toString());
 
-        StepVerifier.create(callExchangeMemberTokenResponseMono.log())
+        StepVerifier.create(result.log())
             .assertNext(response -> assertAll(() -> {
                 assertEquals(HttpStatus.OK.value(), response.getRt());
                 assertTrue(response.getMemberId() > 0);

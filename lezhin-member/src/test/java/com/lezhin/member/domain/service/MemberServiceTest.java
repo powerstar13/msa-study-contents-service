@@ -32,11 +32,11 @@ class MemberServiceTest {
 
         given(memberReader.exchangeMemberToken(any(String.class))).willReturn(memberIdInfoMono());
 
-        Mono<MemberDTO.MemberIdInfo> memberIdInfoMono = memberService.exchangeMemberToken(UUID.randomUUID().toString());
+        Mono<MemberDTO.MemberIdInfo> result = memberService.exchangeMemberToken(UUID.randomUUID().toString());
 
         verify(memberReader).exchangeMemberToken(any(String.class));
 
-        StepVerifier.create(memberIdInfoMono.log())
+        StepVerifier.create(result.log())
             .assertNext(memberIdInfo -> assertTrue(memberIdInfo.getMemberId() > 0))
             .verifyComplete();
     }

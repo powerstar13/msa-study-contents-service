@@ -7,4 +7,6 @@ import reactor.core.publisher.Mono;
 public interface ContentsService {
 
     Mono<ContentsDTO.EvaluationTokenInfo> evaluationRegister(ContentsCommand.ExchangedMemberIdForEvaluationRegister command);
+
+    Mono<ContentsDTO.EvaluationTop3Contents> evaluationTop3Contents();
 }

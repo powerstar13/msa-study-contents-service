@@ -34,4 +34,12 @@ public class ContentsFacade {
                 return contentsService.evaluationRegister(exchangedMemberIdForEvaluationRegister); // 2. 평가 등록 처리
             });
     }
+
+    /**
+     * 좋아요/싫어요 Top3 작품 조회
+     * @return EvaluationTop3Contents: 좋아요/싫어요 Top3 작품 정보
+     */
+    public Mono<ContentsDTO.EvaluationTop3Contents> evaluationTop3Contents() {
+        return contentsService.evaluationTop3Contents(); // 좋아요/싫어요 Top3 작품 조회 처리
+    }
 }

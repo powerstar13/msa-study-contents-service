@@ -12,3 +12,8 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIy
   "evaluationType": "LIKE",
   "comment": "댓글"
 }
+
+### 좋아요/싫어요 Top3 작품 조회
+GET http://localhost:8080/contents/evaluation-top3
+Accept: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIyZi05MzkwLTFiMGMyMjA2YmNiZSIsImlhdCI6MTY1OTc2NDY4NywiZXhwIjoyNjA1ODQ0Njg3fQ.d82eq4XecwOczhNFmay9bQ6N9IXjXAE_1wlg7Ox_dTc

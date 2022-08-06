@@ -37,6 +37,10 @@ public class WebFluxRouter implements WebFluxConfigurer {
                         .POST(RouterPathPattern.CONTENTS_EVALUATION_REGISTER.getPath(), contentsHandler::evaluationRegister) // 평가 등록
                 )
             )
+            .path(RouterPathPattern.CONTENTS_ROOT.getPath(), memberBuilder ->
+                memberBuilder
+                    .GET(RouterPathPattern.EVALUATION_TOP3_CONTENTS.getPath(), contentsHandler::evaluationTop3Contents) // 좋아요/싫어요 Top3 작품 조회
+            )
             .build();
     }
 }
