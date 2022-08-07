@@ -21,6 +21,16 @@ endif::[]
 
 == link:http://localhost:8080/docs/index.html[뒤로가기]
 
+[[member-delete]]
+== 회원 삭제
+=== Http
+include::{snippets}/member/delete/{memberToken}/http-request.adoc[]
+=== Request
+include::{snippets}/member/delete/{memberToken}/path-parameters.adoc[]
+=== Response
+include::{snippets}/member/delete/{memberToken}/response-fields.adoc[]
+include::{snippets}/member/delete/{memberToken}/response-body.adoc[]
+
 ---
 
 include::{docdir}/webClient.adoc[]

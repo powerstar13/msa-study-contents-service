@@ -1,6 +1,8 @@
 package com.lezhin.member.domain.service;
 
+import com.lezhin.member.domain.Member;
 import com.lezhin.member.domain.dto.MemberDTO;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,10 @@ import reactor.test.StepVerifier;
 
 import java.util.UUID;
 
-import static com.lezhin.member.infrastructure.factory.MemberTestFactory.memberIdInfoMono;
+import static com.lezhin.member.infrastructure.factory.MemberTestFactory.memberMono;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -25,19 +28,37 @@ class MemberServiceTest {
 
     @MockBean
     private MemberReader memberReader;
+    @MockBean
+    private MemberStore memberStore;
 
     @DisplayName("회원 고유번호 가져오기")
     @Test
     void exchangeMemberToken() {
 
-        given(memberReader.exchangeMemberToken(any(String.class))).willReturn(memberIdInfoMono());
+        given(memberReader.findByMemberToken(any(String.class))).willReturn(memberMono());
 
         Mono<MemberDTO.MemberIdInfo> result = memberService.exchangeMemberToken(UUID.randomUUID().toString());
 
-        verify(memberReader).exchangeMemberToken(any(String.class));
+        verify(memberReader).findByMemberToken(any(String.class));
 
         StepVerifier.create(result.log())
             .assertNext(memberIdInfo -> assertTrue(memberIdInfo.getMemberId() > 0))
+            .verifyComplete();
+    }
+
+    @DisplayName("회원 삭제")
+    @Test
+    void memberDelete() {
+
+        given(memberReader.findByMemberId(anyLong())).willReturn(memberMono());
+        given(memberStore.memberDelete(any(Member.class))).willReturn(Mono.empty());
+
+        Mono<Void> result = memberService.memberDelete(RandomUtils.nextLong());
+
+        verify(memberReader).findByMemberId(anyLong());
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
             .verifyComplete();
     }
 }

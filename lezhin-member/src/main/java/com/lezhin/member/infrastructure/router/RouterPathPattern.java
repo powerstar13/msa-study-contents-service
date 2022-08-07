@@ -7,6 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RouterPathPattern {
 
+    MEMBER_ROOT("/member", "/member/**"),
+    MEMBER_DELETE("/delete/{memberToken}", "/member/delete/{memberToken}"),
+
     EXCHANGE_ROOT("/exchange", "/exchange/**"),
     EXCHANGE_MEMBER_TOKEN("/member-token/{memberToken}", "/exchange/member-token/{memberToken}");
 

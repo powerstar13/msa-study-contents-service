@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberReader memberReader;
+    private final MemberStore memberStore;
 
     /**
      * 회원 고유번호 가져오기
@@ -19,6 +20,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Mono<MemberDTO.MemberIdInfo> exchangeMemberToken(String memberToken) {
 
-        return memberReader.exchangeMemberToken(memberToken);
+        return memberReader.findByMemberToken(memberToken) // 회원 정보 조회
+            .flatMap(member -> Mono.just(new MemberDTO.MemberIdInfo(member.getMemberId())));
+    }
+
+    /**
+     * 회원 삭제 처리
+     * @param memberId: 회원 고유번호
+     */
+    @Override
+    public Mono<Void> memberDelete(long memberId) {
+
+        return memberReader.findByMemberId(memberId) // 1. 회원 정보 조회
+            .flatMap(memberStore::memberDelete); // 2. 회원 삭제
     }
 }
