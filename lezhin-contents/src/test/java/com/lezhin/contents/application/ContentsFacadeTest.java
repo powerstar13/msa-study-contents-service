@@ -13,9 +13,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.UUID;
+
 import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -66,6 +67,21 @@ class ContentsFacadeTest {
                 assertEquals(3, evaluationTop3Contents.getLikeTop3Contents().size());
                 assertEquals(3, evaluationTop3Contents.getDislikeTop3Contents().size());
             }))
+            .verifyComplete();
+    }
+
+    @DisplayName("작품 고유번호 가져오기")
+    @Test
+    void exchangeContentsToken() {
+
+        given(contentsService.exchangeContentsToken(any(String.class))).willReturn(contentsIdInfoMono());
+
+        Mono<ContentsDTO.ContentsIdInfo> result = contentsFacade.exchangeContentsToken(UUID.randomUUID().toString());
+
+        verify(contentsService).exchangeContentsToken(any(String.class));
+
+        StepVerifier.create(result.log())
+            .assertNext(contentsIdInfo -> assertTrue(contentsIdInfo.getContentsId() > 0))
             .verifyComplete();
     }
 }

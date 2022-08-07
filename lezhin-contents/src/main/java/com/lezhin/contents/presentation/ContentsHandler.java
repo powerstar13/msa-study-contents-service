@@ -8,7 +8,9 @@ import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
 import com.lezhin.contents.presentation.response.ContentsResponseMapper;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
 import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
+import com.lezhin.contents.presentation.response.ExchangeContentsTokenResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -56,5 +58,23 @@ public class ContentsHandler {
 
         return ok().contentType(MediaType.APPLICATION_JSON)
             .body(response, EvaluationTop3ContentsResponse.class);
+    }
+
+    /**
+     * 작품 고유번호 가져오기
+     * @param serverRequest: 작품 대체 식별키
+     * @return ExchangeContentsTokenResponse: 작품 고유번호
+     */
+    public Mono<ServerResponse> exchangeContentsToken(ServerRequest serverRequest) {
+
+        String contentsToken = serverRequest.pathVariable("contentsToken"); // 작품 대체 식별키 추출
+        if (StringUtils.isBlank(contentsToken)) throw new BadRequestException(ExceptionMessage.IsRequiredContentsToken.getMessage());
+
+        Mono<ExchangeContentsTokenResponse> response = contentsFacade.exchangeContentsToken(contentsToken)
+            .flatMap(contentsIdInfo -> Mono.just(contentsResponseMapper.of(contentsIdInfo)));
+
+        return ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(response, ExchangeContentsTokenResponse.class);
     }
 }

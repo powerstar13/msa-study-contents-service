@@ -3,7 +3,6 @@ package com.lezhin.contents.infrastructure.webClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lezhin.contents.infrastructure.webClient.response.ExchangeMemberTokenResponse;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.apache.commons.lang3.RandomUtils;
@@ -23,7 +22,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Slf4j
 @SpringBootTest
 class MemberWebClientServiceTest {
 

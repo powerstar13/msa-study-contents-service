@@ -7,6 +7,7 @@ import com.lezhin.contents.infrastructure.webClient.response.ExchangeMemberToken
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
 import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
+import com.lezhin.contents.presentation.response.ExchangeContentsTokenResponse;
 import com.lezhin.contents.presentation.response.dto.ContentsResponseDTO;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.http.HttpStatus;
@@ -222,6 +223,27 @@ public class ContentsTestFactory {
         return EvaluationTop3ContentsResponse.builder()
             .likeTop3Contents(contentsInfoResponseDTOList())
             .dislikeTop3Contents(contentsInfoResponseDTOList())
+            .build();
+    }
+
+    /**
+     * 작품 고유번호 정보
+     */
+    public static ContentsDTO.ContentsIdInfo contentsIdInfo() {
+
+        return ContentsDTO.ContentsIdInfo.builder()
+            .contentsId(RandomUtils.nextLong())
+            .build();
+    }
+
+    public static Mono<ContentsDTO.ContentsIdInfo> contentsIdInfoMono() {
+        return Mono.just(contentsIdInfo());
+    }
+
+    public static ExchangeContentsTokenResponse exchangeContentsTokenResponse() {
+
+        return ExchangeContentsTokenResponse.builder()
+            .contentsId(RandomUtils.nextLong())
             .build();
     }
 }

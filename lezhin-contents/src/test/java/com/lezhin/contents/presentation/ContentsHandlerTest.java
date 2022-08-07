@@ -9,6 +9,7 @@ import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
 import com.lezhin.contents.presentation.response.ContentsResponseMapper;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
 import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
+import com.lezhin.contents.presentation.response.ExchangeContentsTokenResponse;
 import com.lezhin.contents.presentation.shared.WebFluxSharedHandlerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,8 @@ import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.test.StepVerifier;
 
+import java.util.UUID;
+
 import static com.lezhin.contents.infrastructure.factory.ContentsTestFactory.*;
 import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentFormat.*;
 import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentUtil.requestPrettyPrint;
@@ -32,8 +35,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
 @WebFluxTest(ContentsHandler.class)
@@ -157,6 +159,49 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
                 assertEquals(HttpStatus.OK.value(), response.getRt());
                 assertEquals(3, response.getLikeTop3Contents().size());
                 assertEquals(3, response.getDislikeTop3Contents().size());
+            }))
+            .verifyComplete();
+    }
+
+    @DisplayName("작품 고유번호 가져오기")
+    @Test
+    void exchangeContentsToken() {
+        // given
+        given(contentsFacade.exchangeContentsToken(any(String.class))).willReturn(contentsIdInfoMono());
+        given(contentsResponseMapper.of(any(ContentsDTO.ContentsIdInfo.class))).willReturn(exchangeContentsTokenResponse());
+
+        // when
+        final String URI = RouterPathPattern.EXCHANGE_CONTENTS_TOKEN.getFullPath();
+        WebTestClient.ResponseSpec result = webClient
+            .get()
+            .uri(URI, UUID.randomUUID().toString())
+            .exchange();
+
+        result.expectStatus().isOk()
+            .expectBody()
+            .consumeWith(document(URI,
+                requestPrettyPrint(),
+                responsePrettyPrint(),
+                pathParameters(
+                    parameterWithName("contentsToken").description("작품 대체 식별키")
+                ),
+                responseFields(
+                    fieldWithPath("rt").type(JsonFieldType.NUMBER).description("결과 코드"),
+                    fieldWithPath("rtMsg").type(JsonFieldType.STRING).description("결과 메시지"),
+                    fieldWithPath("contentsId").type(JsonFieldType.NUMBER).description("작품 고유번호")
+                )
+            ));
+
+        FluxExchangeResult<ExchangeContentsTokenResponse> flux = result.returnResult(ExchangeContentsTokenResponse.class);
+
+        // then
+        verify(contentsFacade).exchangeContentsToken(any(String.class));
+        verify(contentsResponseMapper).of(any(ContentsDTO.ContentsIdInfo.class));
+
+        StepVerifier.create(flux.getResponseBody().log())
+            .assertNext(response -> assertAll(() -> {
+                assertEquals(HttpStatus.OK.value(), response.getRt());
+                assertTrue(response.getContentsId() > 0);
             }))
             .verifyComplete();
     }
