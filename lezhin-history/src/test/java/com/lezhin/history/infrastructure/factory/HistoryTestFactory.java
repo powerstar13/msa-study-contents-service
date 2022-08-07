@@ -8,7 +8,9 @@ import com.lezhin.history.domain.MemberType;
 import com.lezhin.history.domain.service.dto.HistoryDTO;
 import com.lezhin.history.infrastructure.webClient.response.ExchangeContentsTokenResponse;
 import com.lezhin.history.presentation.request.ContentsHistoryPageRequest;
+import com.lezhin.history.presentation.request.SearchHistoryPageRequest;
 import com.lezhin.history.presentation.response.ContentsHistoryPageResponse;
+import com.lezhin.history.presentation.response.SearchHistoryPageResponse;
 import com.lezhin.history.presentation.response.dto.HistoryResponseDTO;
 import com.lezhin.history.presentation.shared.response.PageResponseDTO;
 import org.apache.commons.lang3.RandomUtils;
@@ -52,9 +54,9 @@ public class HistoryTestFactory {
         return Flux.just(history(), history());
     }
 
-    public static HistoryDTO.HistoryMemberInfo historyMemberInfoDTO() {
+    public static HistoryDTO.ContentsHistoryMemberInfo contentsHistoryMemberInfoDTO() {
 
-        return HistoryDTO.HistoryMemberInfo.builder()
+        return HistoryDTO.ContentsHistoryMemberInfo.builder()
             .historyToken(UUID.randomUUID().toString())
             .memberType(memberType)
             .memberEmail(memberEmail)
@@ -79,7 +81,7 @@ public class HistoryTestFactory {
             .pageInfo(pageInfo())
             .historyList(
                 Arrays.asList(
-                    historyMemberInfoDTO(), historyMemberInfoDTO()
+                    contentsHistoryMemberInfoDTO(), contentsHistoryMemberInfoDTO()
                 )
             )
             .build();
@@ -146,9 +148,9 @@ public class HistoryTestFactory {
             .build();
     }
 
-    public static HistoryResponseDTO.HistoryMemberInfo historyMemberInfoResponseDTO() {
+    public static HistoryResponseDTO.ContentsHistoryMemberInfo contentsHistoryMemberInfoResponseDTO() {
 
-        return HistoryResponseDTO.HistoryMemberInfo.builder()
+        return HistoryResponseDTO.ContentsHistoryMemberInfo.builder()
             .historyToken(UUID.randomUUID().toString())
             .memberType(memberType)
             .memberEmail(memberEmail)
@@ -159,7 +161,7 @@ public class HistoryTestFactory {
     }
 
     /**
-     * 작품별 조회 이력 페이지 Response
+     * 이력 페이지 Response
      */
     public static ContentsHistoryPageResponse contentsHistoryPageResponse() {
 
@@ -167,7 +169,81 @@ public class HistoryTestFactory {
             .pageInfo(pageResponseDTO())
             .historyList(
                 Arrays.asList(
-                    historyMemberInfoResponseDTO(), historyMemberInfoResponseDTO()
+                    contentsHistoryMemberInfoResponseDTO(), contentsHistoryMemberInfoResponseDTO()
+                )
+            )
+            .build();
+    }
+
+    public static HistoryCommand.SearchHistoryPage searchHistoryPageCommand() {
+
+        return HistoryCommand.SearchHistoryPage.builder()
+            .weekInterval(1)
+            .adultOnly(AdultOnly.Y)
+            .historyCount(3)
+            .build();
+    }
+
+    public static HistoryDTO.SearchHistoryMemberInfo searchHistoryMemberInfoDTO() {
+
+        return HistoryDTO.SearchHistoryMemberInfo.builder()
+            .memberType(memberType)
+            .memberEmail(memberEmail)
+            .memberName(memberName)
+            .memberGender(memberGender)
+            .build();
+    }
+
+    public static HistoryDTO.SearchHistoryPage searchHistoryPageDTO() {
+
+        return HistoryDTO.SearchHistoryPage.builder()
+            .pageInfo(pageInfo())
+            .memberList(
+                Arrays.asList(
+                    searchHistoryMemberInfoDTO(), searchHistoryMemberInfoDTO()
+                )
+            )
+            .build();
+    }
+
+    public static Mono<HistoryDTO.SearchHistoryPage> searchHistoryPageDTOMono() {
+        return Mono.just(searchHistoryPageDTO());
+    }
+
+    /**
+     * 사용자 조회 이력 페이지 Request
+     */
+    public static SearchHistoryPageRequest searchHistoryPageRequest() {
+
+        return SearchHistoryPageRequest.builder()
+            .page(1)
+            .size(10)
+            .weekInterval(1)
+            .adultOnly(AdultOnly.Y)
+            .historyCount(3)
+            .build();
+    }
+
+    public static HistoryResponseDTO.SearchHistoryMemberInfo searchHistoryMemberInfoResponseDTO() {
+
+        return HistoryResponseDTO.SearchHistoryMemberInfo.builder()
+            .memberType(memberType)
+            .memberEmail(memberEmail)
+            .memberName(memberName)
+            .memberGender(memberGender)
+            .build();
+    }
+
+    /**
+     * 사용자 조회 이력 페이지 Response
+     */
+    public static SearchHistoryPageResponse searchHistoryPageResponse() {
+
+        return SearchHistoryPageResponse.builder()
+            .pageInfo(pageResponseDTO())
+            .memberList(
+                Arrays.asList(
+                    searchHistoryMemberInfoResponseDTO(), searchHistoryMemberInfoResponseDTO()
                 )
             )
             .build();

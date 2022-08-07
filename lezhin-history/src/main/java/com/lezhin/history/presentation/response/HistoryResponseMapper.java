@@ -13,4 +13,6 @@ import org.mapstruct.ReportingPolicy;
 public interface HistoryResponseMapper {
 
     ContentsHistoryPageResponse of(HistoryDTO.ContentsHistoryPage contentsHistoryPage);
+
+    SearchHistoryPageResponse of(HistoryDTO.SearchHistoryPage searchHistoryPage);
 }

@@ -16,7 +16,7 @@ public class HistoryResponseDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class HistoryMemberInfo {
+    public static class ContentsHistoryMemberInfo {
 
         private String historyToken; // 이력 대체 식별키
         private MemberType memberType; // 회원 유형
@@ -35,6 +35,26 @@ public class HistoryResponseDTO {
                 + ", \"memberName\":\"" + memberName + "\""
                 + ", \"memberGender\":\"" + memberGender + "\""
                 + ", \"createdAt\":\"" + createdAt + "\""
+                + "}";
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class SearchHistoryMemberInfo {
+
+        private MemberType memberType; // 회원 유형
+        private String memberEmail; // 회원 이메일
+        private String memberName; // 회원 이름
+        private MemberGender memberGender; // 회원 성별
+
+        @Override
+        public String toString() {
+            return "{"
+                + "\"memberType\":\"" + memberType + "\""
+                + ", \"memberEmail\":\"" + memberEmail + "\""
+                + ", \"memberName\":\"" + memberName + "\""
+                + ", \"memberGender\":\"" + memberGender + "\""
                 + "}";
         }
     }

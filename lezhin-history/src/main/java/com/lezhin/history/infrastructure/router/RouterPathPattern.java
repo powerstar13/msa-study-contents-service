@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum RouterPathPattern {
 
     HISTORY_ROOT("/history", "/history/**"),
-    CONTENTS_HISTORY_PAGE("/contents/page", "/history/contents/page");
+    CONTENTS_HISTORY_PAGE("/contents/page", "/history/contents/page"),
+    SEARCH_HISTORY_PAGE("/search/page", "/history/search/page");
 
     private final String path;
     private final String fullPath;

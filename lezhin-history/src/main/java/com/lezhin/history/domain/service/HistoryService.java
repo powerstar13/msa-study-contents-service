@@ -7,4 +7,6 @@ import reactor.core.publisher.Mono;
 public interface HistoryService {
 
     Mono<HistoryDTO.ContentsHistoryPage> contentsHistoryPage(HistoryCommand.ExchangedContentsHistoryPage command);
+
+    Mono<HistoryDTO.SearchHistoryPage> searchHistoryPage(HistoryCommand.SearchHistoryPage command);
 }

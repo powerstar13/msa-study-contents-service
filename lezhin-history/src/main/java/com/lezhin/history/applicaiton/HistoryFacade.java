@@ -35,4 +35,13 @@ public class HistoryFacade {
                 return historyService.contentsHistoryPage(exchangedContentsHistoryPage); // 2. 작품별 조회 이력 페이지 조회 처리
             });
     }
+
+    /**
+     * 사용자 이력 페이지
+     * @param command: 조회할 정보
+     * @return SearchHistoryPage: 이력 페이지
+     */
+    public Mono<HistoryDTO.SearchHistoryPage> searchHistoryPage(HistoryCommand.SearchHistoryPage command) {
+        return historyService.searchHistoryPage(command); // 사용자 이력 페이지 조회 처리
+    }
 }

@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
-public interface HistoryRepository extends ReactiveCrudRepository<History, Long> {
+public interface HistoryRepository extends ReactiveCrudRepository<History, Long>, HistoryCustomRepository {
 
     Flux<History> findAllByContentsId(long contentsId, Pageable pageable);
 

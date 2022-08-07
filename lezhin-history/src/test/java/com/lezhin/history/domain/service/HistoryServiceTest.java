@@ -10,8 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static com.lezhin.history.infrastructure.factory.HistoryTestFactory.contentsHistoryPageDTOMono;
-import static com.lezhin.history.infrastructure.factory.HistoryTestFactory.exchangedContentsHistoryPageCommand;
+import static com.lezhin.history.infrastructure.factory.HistoryTestFactory.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -38,6 +37,21 @@ class HistoryServiceTest {
 
         StepVerifier.create(result.log())
             .assertNext(contentsHistoryPage -> assertNotNull(contentsHistoryPage.getHistoryList()))
+            .verifyComplete();
+    }
+
+    @DisplayName("사용자 조회 이력 페이지")
+    @Test
+    void test() {
+
+        given(historyReader.findAllSearchHistoryPage(any(HistoryCommand.SearchHistoryPage.class))).willReturn(searchHistoryPageDTOMono());
+
+        Mono<HistoryDTO.SearchHistoryPage> result = historyService.searchHistoryPage(searchHistoryPageCommand());
+
+        verify(historyReader).findAllSearchHistoryPage(any(HistoryCommand.SearchHistoryPage.class));
+
+        StepVerifier.create(result.log())
+            .assertNext(searchHistoryPage -> assertNotNull(searchHistoryPage.getMemberList()))
             .verifyComplete();
     }
 }

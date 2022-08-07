@@ -31,6 +31,7 @@ public class WebFluxRouter implements WebFluxConfigurer {
             .path(RouterPathPattern.HISTORY_ROOT.getPath(), builder ->
                 builder
                     .GET(RouterPathPattern.CONTENTS_HISTORY_PAGE.getPath(), historyHandler::contentsHistoryPage) // 작품별 조회 이력 페이지
+                    .GET(RouterPathPattern.SEARCH_HISTORY_PAGE.getPath(), historyHandler::searchHistoryPage) // 사용자 조회 이력 페이지
             )
             .build();
     }

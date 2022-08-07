@@ -1,5 +1,6 @@
 package com.lezhin.history.applicaiton.dto;
 
+import com.lezhin.history.domain.AdultOnly;
 import com.lezhin.history.presentation.shared.request.PageRequestDTO;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -32,6 +33,25 @@ public class HistoryCommand {
             return "{"
                 + super.toString().replace("}", "")
                 + ", \"contentsId\":" + contentsId
+                + "}";
+        }
+    }
+
+    @Getter
+    @SuperBuilder
+    public static class SearchHistoryPage extends PageRequestDTO {
+
+        private Integer weekInterval; // 주 간격
+        private AdultOnly adultOnly; // 성인물 여부
+        private Integer historyCount; // 이력 수
+
+        @Override
+        public String toString() {
+            return "{"
+                + super.toString().replace("}", "")
+                + ", \"weekInterval\":" + weekInterval
+                + ", \"adultOnly\":\"" + adultOnly + "\""
+                + ", \"historyCount\":" + historyCount
                 + "}";
         }
     }

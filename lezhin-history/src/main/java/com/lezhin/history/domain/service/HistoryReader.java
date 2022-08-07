@@ -7,4 +7,6 @@ import reactor.core.publisher.Mono;
 public interface HistoryReader {
 
     Mono<HistoryDTO.ContentsHistoryPage> findAllContentsHistoryPage(HistoryCommand.ExchangedContentsHistoryPage command);
+
+    Mono<HistoryDTO.SearchHistoryPage> findAllSearchHistoryPage(HistoryCommand.SearchHistoryPage command);
 }
