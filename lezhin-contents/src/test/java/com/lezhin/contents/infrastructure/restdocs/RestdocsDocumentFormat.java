@@ -47,4 +47,8 @@ public class RestdocsDocumentFormat {
     public static Attributes.Attribute yyyyMMddFormat() {
         return setFormat("yyyy-MM-dd");
     }
+
+    public static Attributes.Attribute coinFormat() {
+        return setFormat("유료의 경우 필수");
+    }
 }

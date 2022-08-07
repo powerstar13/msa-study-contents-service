@@ -2,6 +2,7 @@ package com.lezhin.contents.application.dto;
 
 import com.lezhin.contents.domain.Evaluation;
 import com.lezhin.contents.domain.EvaluationType;
+import com.lezhin.contents.domain.PricingType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -76,6 +77,24 @@ public class ContentsCommand {
                 + ", \"contentsId\":" + contentsId
                 + ", \"evaluationType\":\"" + evaluationType + "\""
                 + ", \"comment\":\"" + comment + "\""
+                + "}";
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class PricingModify {
+
+        private String contentsToken; // 작품 대체 식별키
+        private PricingType pricingType; // 가격 유형
+        private Integer coin; // 금액
+
+        @Override
+        public String toString() {
+            return "{"
+                + "\"contentsToken\":\"" + contentsToken + "\""
+                + ", \"pricingType\":\"" + pricingType + "\""
+                + ", \"coin\":" + coin
                 + "}";
         }
     }

@@ -10,6 +10,7 @@ public enum RouterPathPattern {
     CONTENTS_ROOT("/contents", "/contents/**"),
     CONTENTS_EVALUATION_REGISTER("/evaluation-register", "/contents/evaluation-register"),
     EVALUATION_TOP3_CONTENTS("/evaluation-top3", "/contents/evaluation-top3"),
+    PRICING_MODIFY("/pricing-modify", "/contents/pricing-modify"),
 
     EXCHANGE_ROOT("/exchange", "/exchange/**"),
     EXCHANGE_CONTENTS_TOKEN("/contents-token/{contentsToken}", "/exchange/contents-token/{contentsToken}");

@@ -53,7 +53,21 @@ public class ContentsServiceImpl implements ContentsService {
      */
     @Override
     public Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken) {
+
         return contentsReader.findByContentsToken(contentsToken)
             .flatMap(contents -> Mono.just(new ContentsDTO.ContentsIdInfo(contents.getContentsId())));
+    }
+
+    /**
+     * 가격 변경 처리
+     * @param command: 변경할 가격 정보
+     */
+    @Override
+    public Mono<Void> pricingModify(ContentsCommand.PricingModify command) {
+
+        return contentsReader.findByContentsToken(command.getContentsToken()) // 1. 작품 정보 조회
+            .flatMap(contents -> {
+                return contentsStore.pricingModify(contents, command); // 2. 가격 변경
+            });
     }
 }

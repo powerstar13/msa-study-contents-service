@@ -46,4 +46,20 @@ class ContentsStoreTest {
             .assertNext(Assertions::assertNotNull)
             .verifyComplete();
     }
+
+    @DisplayName("가격 변경")
+    @Test
+    void pricingModify() {
+        ContentsCommand.PricingModify command = pricingModifyCommand();
+
+        given(contentsRepository.save(any(Contents.class))).willReturn(contentsMono());
+
+        Mono<Void> result = contentsStore.pricingModify(contents(0, 0), command);
+
+        verify(contentsRepository).save(any(Contents.class));
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
+            .verifyComplete();
+    }
 }

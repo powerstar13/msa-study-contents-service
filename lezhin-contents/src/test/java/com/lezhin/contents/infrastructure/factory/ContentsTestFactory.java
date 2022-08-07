@@ -5,6 +5,7 @@ import com.lezhin.contents.domain.*;
 import com.lezhin.contents.domain.service.dto.ContentsDTO;
 import com.lezhin.contents.infrastructure.webClient.response.ExchangeMemberTokenResponse;
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
+import com.lezhin.contents.presentation.request.PricingModifyRequest;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
 import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
 import com.lezhin.contents.presentation.response.ExchangeContentsTokenResponse;
@@ -244,6 +245,27 @@ public class ContentsTestFactory {
 
         return ExchangeContentsTokenResponse.builder()
             .contentsId(RandomUtils.nextLong())
+            .build();
+    }
+
+    public static ContentsCommand.PricingModify pricingModifyCommand() {
+
+        return ContentsCommand.PricingModify.builder()
+            .contentsToken(UUID.randomUUID().toString())
+            .pricingType(PricingType.PAY)
+            .coin(100)
+            .build();
+    }
+
+    /**
+     * 가격 변경 Request
+     */
+    public static PricingModifyRequest pricingModifyRequest() {
+
+        return PricingModifyRequest.builder()
+            .contentsToken(UUID.randomUUID().toString())
+            .pricingType(PricingType.PAY)
+            .coin(100)
             .build();
     }
 }
