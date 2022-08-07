@@ -13,4 +13,6 @@ import org.mapstruct.ReportingPolicy;
 public interface ContentsRequestMapper {
 
     ContentsCommand.EvaluationRegister of(EvaluationRegisterRequest request);
+
+    ContentsCommand.PricingModify of(PricingModifyRequest request);
 }

@@ -84,4 +84,20 @@ class ContentsFacadeTest {
             .assertNext(contentsIdInfo -> assertTrue(contentsIdInfo.getContentsId() > 0))
             .verifyComplete();
     }
+
+    @DisplayName("가격 변경")
+    @Test
+    void pricingModify() {
+        ContentsCommand.PricingModify command = pricingModifyCommand();
+
+        given(contentsService.pricingModify(any(ContentsCommand.PricingModify.class))).willReturn(Mono.empty());
+
+        Mono<Void> result = contentsFacade.pricingModify(command);
+
+        verify(contentsService).pricingModify(any(ContentsCommand.PricingModify.class));
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
+            .verifyComplete();
+    }
 }

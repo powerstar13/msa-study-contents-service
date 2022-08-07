@@ -6,11 +6,13 @@ import com.lezhin.contents.domain.service.dto.ContentsDTO;
 import com.lezhin.contents.infrastructure.router.RouterPathPattern;
 import com.lezhin.contents.presentation.request.ContentsRequestMapper;
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
+import com.lezhin.contents.presentation.request.PricingModifyRequest;
 import com.lezhin.contents.presentation.response.ContentsResponseMapper;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
 import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
 import com.lezhin.contents.presentation.response.ExchangeContentsTokenResponse;
 import com.lezhin.contents.presentation.shared.WebFluxSharedHandlerTest;
+import com.lezhin.contents.presentation.shared.response.SuccessResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.UUID;
@@ -203,6 +206,51 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
                 assertEquals(HttpStatus.OK.value(), response.getRt());
                 assertTrue(response.getContentsId() > 0);
             }))
+            .verifyComplete();
+    }
+
+    @DisplayName("가격 변경")
+    @Test
+    void pricingModify() {
+        // given
+        given(contentsRequestMapper.of(any(PricingModifyRequest.class))).willReturn(pricingModifyCommand());
+        given(contentsFacade.pricingModify(any(ContentsCommand.PricingModify.class))).willReturn(Mono.empty());
+
+        // when
+        final String URI = RouterPathPattern.PRICING_MODIFY.getFullPath();
+        WebTestClient.ResponseSpec result = webClient
+            .put()
+            .uri(URI)
+            .header(AUTHORIZATION, "accessToken")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(pricingModifyRequest())
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange();
+
+        result.expectStatus().isOk()
+            .expectBody()
+            .consumeWith(document(URI,
+                requestPrettyPrint(),
+                responsePrettyPrint(),
+                requestFields(
+                    fieldWithPath("contentsToken").type(JsonFieldType.STRING).description("작품 대체 식별키"),
+                    fieldWithPath("pricingType").type(JsonFieldType.STRING).description("가격 유형").attributes(pricingTypeFormat()).optional(),
+                    fieldWithPath("coin").type(JsonFieldType.NUMBER).description("금액").attributes(coinFormat()).optional()
+                ),
+                responseFields(
+                    fieldWithPath("rt").type(JsonFieldType.NUMBER).description("결과 코드"),
+                    fieldWithPath("rtMsg").type(JsonFieldType.STRING).description("결과 메시지")
+                )
+            ));
+
+        FluxExchangeResult<SuccessResponse> flux = result.returnResult(SuccessResponse.class);
+
+        // then
+        verify(contentsRequestMapper).of(any(PricingModifyRequest.class));
+        verify(contentsFacade).pricingModify(any(ContentsCommand.PricingModify.class));
+
+        StepVerifier.create(flux.getResponseBody().log())
+            .assertNext(response -> assertEquals(HttpStatus.OK.value(), response.getRt()))
             .verifyComplete();
     }
 }

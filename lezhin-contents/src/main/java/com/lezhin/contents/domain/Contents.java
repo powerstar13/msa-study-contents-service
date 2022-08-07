@@ -2,6 +2,8 @@ package com.lezhin.contents.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lezhin.contents.domain.shared.CommonDateEntity;
+import com.lezhin.contents.infrastructure.exception.status.BadRequestException;
+import com.lezhin.contents.infrastructure.exception.status.ExceptionMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,6 +65,16 @@ public class Contents extends CommonDateEntity { // 작품
      */
     public void dislikeUp() {
         this.dislikeCount += 1;
+    }
+
+    /**
+     * 가격 변경
+     * @param pricingType: 가격 유형
+     * @param coin: 금액
+     */
+    public void pricingModify(PricingType pricingType, Integer coin) {
+        this.pricingType = pricingType;
+        this.coin = pricingType.equals(PricingType.PAY) ? coin : 0;
     }
 
     @Override

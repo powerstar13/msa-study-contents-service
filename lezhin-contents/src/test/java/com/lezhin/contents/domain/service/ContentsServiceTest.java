@@ -84,4 +84,21 @@ class ContentsServiceTest {
             .assertNext(contentsIdInfo -> assertTrue(contentsIdInfo.getContentsId() > 0))
             .verifyComplete();
     }
+
+    @DisplayName("가격 변경 처리")
+    @Test
+    void pricingModify() {
+        ContentsCommand.PricingModify command = pricingModifyCommand();
+
+        given(contentsReader.findByContentsToken(any(String.class))).willReturn(contentsMono());
+        given(contentsStore.pricingModify(any(Contents.class), any(ContentsCommand.PricingModify.class))).willReturn(Mono.empty());
+
+        Mono<Void> result = contentsService.pricingModify(command);
+
+        verify(contentsReader).findByContentsToken(any(String.class));
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
+            .verifyComplete();
+    }
 }

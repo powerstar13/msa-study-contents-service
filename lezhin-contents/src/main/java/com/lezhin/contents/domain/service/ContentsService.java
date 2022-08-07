@@ -11,4 +11,6 @@ public interface ContentsService {
     Mono<ContentsDTO.EvaluationTop3Contents> evaluationTop3Contents();
 
     Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken);
+
+    Mono<Void> pricingModify(ContentsCommand.PricingModify command);
 }

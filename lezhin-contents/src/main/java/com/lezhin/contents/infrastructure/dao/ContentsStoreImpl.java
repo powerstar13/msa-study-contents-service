@@ -22,6 +22,7 @@ public class ContentsStoreImpl implements ContentsStore {
 
     /**
      * 평가 등록
+     * @param contents: 작품 레퍼러스
      * @param command: 등록할 평가 정보
      * @return Evaluation: 평가 레퍼런스
      */
@@ -37,5 +38,19 @@ public class ContentsStoreImpl implements ContentsStore {
                 return contentsRepository.save(contents)
                     .then(Mono.just(evaluation));
             });
+    }
+
+    /**
+     * 가격 변경
+     * @param contents: 작품 레퍼런스
+     * @param command: 변경할 가격 정보
+     */
+    @Override
+    public Mono<Void> pricingModify(Contents contents, ContentsCommand.PricingModify command) {
+
+        contents.pricingModify(command.getPricingType(), command.getCoin());
+
+        return contentsRepository.save(contents)
+            .then();
     }
 }

@@ -51,4 +51,12 @@ public class ContentsFacade {
     public Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken) {
         return contentsService.exchangeContentsToken(contentsToken); // 작품 고유번호 가져오기 처리
     }
+
+    /**
+     * 가격 변경
+     * @param command: 변경할 가격 정보
+     */
+    public Mono<Void> pricingModify(ContentsCommand.PricingModify command) {
+       return contentsService.pricingModify(command); // 가격 변경 처리
+    }
 }

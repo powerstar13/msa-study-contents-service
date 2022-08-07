@@ -461,13 +461,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response_2">Response</a></li>
 </ul>
 </li>
-<li><a href="#private-api">⚠️BackEnd WebClient 전용 API</a>
-<ul class="sectlevel1">
-<li><a href="#exchange-contents-token">작품 고유번호 가져오기</a>
+<li><a href="#pricing-modify">가격 변경</a>
 <ul class="sectlevel2">
 <li><a href="#_http_3">Http</a></li>
 <li><a href="#_request_3">Request</a></li>
 <li><a href="#_response_3">Response</a></li>
+</ul>
+</li>
+<li><a href="#private-api">⚠️BackEnd WebClient 전용 API</a>
+<ul class="sectlevel1">
+<li><a href="#exchange-contents-token">작품 고유번호 가져오기</a>
+<ul class="sectlevel2">
+<li><a href="#_http_4">Http</a></li>
+<li><a href="#_request_4">Request</a></li>
+<li><a href="#_response_4">Response</a></li>
 </ul>
 </li>
 </ul>
@@ -497,8 +504,8 @@ Content-Length: 178
 Host: localhost:8080
 
 {
-  "memberToken" : "44b2f67e-c1c0-4ca1-9a8a-2a20fbc3dbdc",
-  "contentsToken" : "853c6add-1428-4024-8588-c311e0fd15b9",
+  "memberToken" : "8977a189-3bd3-4d5a-89b6-5407e5a06a16",
+  "contentsToken" : "a0bc6544-5383-4080-bf49-42ef656aa740",
   "evaluationType" : "LIKE",
   "comment" : "댓글"
 }</code></pre>
@@ -604,7 +611,7 @@ Host: localhost:8080
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "rt" : 201,
   "rtMsg" : "Created",
-  "evaluationToken" : "268649cc-72eb-4ef7-be16-96cb103eec46"
+  "evaluationToken" : "2b850303-1077-4d6c-a12d-c970c37b964b"
 }</code></pre>
 </div>
 </div>
@@ -798,55 +805,168 @@ Host: localhost:8080</code></pre>
   "rt" : 200,
   "rtMsg" : "OK",
   "likeTop3Contents" : [ {
-    "contentsToken" : "1a6539bd-d9e6-4ba9-b9ad-6569511ad11c",
+    "contentsToken" : "cd088aaa-0604-4c3c-9f4c-6ccb59f3fe60",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
     "coin" : 0,
     "adultOnly" : "N",
-    "openAt" : "2022-08-07"
+    "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "b498d91c-9ecf-4409-8c7a-8ba4edf48e75",
+    "contentsToken" : "d965bc40-28fc-46a1-b3da-4090a28e0f9b",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
     "coin" : 0,
     "adultOnly" : "N",
-    "openAt" : "2022-08-07"
+    "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "c88633eb-efa9-4e92-a7c7-2c8eaf850cc3",
+    "contentsToken" : "18034300-713b-4a73-95b6-ce24855234dd",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
     "coin" : 0,
     "adultOnly" : "N",
-    "openAt" : "2022-08-07"
+    "openAt" : "2022-08-08"
   } ],
   "dislikeTop3Contents" : [ {
-    "contentsToken" : "e518dc3d-c6b9-44da-a788-ca5397bff26e",
+    "contentsToken" : "b6c79fcb-7407-49bc-895c-667691be24aa",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
     "coin" : 0,
     "adultOnly" : "N",
-    "openAt" : "2022-08-07"
+    "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "201063c6-7f90-4a9b-9588-57baef41e958",
+    "contentsToken" : "f5c7c809-dd56-4251-901b-7eb7e1b8a269",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
     "coin" : 0,
     "adultOnly" : "N",
-    "openAt" : "2022-08-07"
+    "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "05730f54-5e49-49da-b21d-2fc3c9c80149",
+    "contentsToken" : "6f4edd04-554b-46c7-ab4c-dbaa0a95589d",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
     "coin" : 0,
     "adultOnly" : "N",
-    "openAt" : "2022-08-07"
+    "openAt" : "2022-08-08"
   } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="pricing-modify"><a class="link" href="#pricing-modify">가격 변경</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_http_3"><a class="link" href="#_http_3">Http</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /contents/pricing-modify HTTP/1.1
+Authorization: accessToken
+Content-Type: application/json
+Accept: application/json
+Content-Length: 107
+Host: localhost:8080
+
+{
+  "contentsToken" : "b4446e82-974a-4f6c-b83f-c6225ef21735",
+  "pricingType" : "PAY",
+  "coin" : 100
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_request_3"><a class="link" href="#_request_3">Request</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수값</th>
+<th class="tableblock halign-left valign-top">양식</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contentsToken</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작품 대체 식별키</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pricingType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FREE: 무료, PAY: 유료</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가격 유형</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유료의 경우 필수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">금액</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_response_3"><a class="link" href="#_response_3">Response</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수값</th>
+<th class="tableblock halign-left valign-top">양식</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rtMsg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "rt" : 200,
+  "rtMsg" : "OK"
 }</code></pre>
 </div>
 </div>
@@ -859,16 +979,16 @@ Host: localhost:8080</code></pre>
 <h2 id="exchange-contents-token"><a class="link" href="#exchange-contents-token">작품 고유번호 가져오기</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_http_3"><a class="link" href="#_http_3">Http</a></h3>
+<h3 id="_http_4"><a class="link" href="#_http_4">Http</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /exchange/contents-token/8e2179e1-46e8-45b4-835e-3320d7ec66ad HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /exchange/contents-token/23274d88-624e-4124-b2e8-3cd56e0ef29a HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_request_3"><a class="link" href="#_request_3">Request</a></h3>
+<h3 id="_request_4"><a class="link" href="#_request_4">Request</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /exchange/contents-token/{contentsToken}</caption>
 <colgroup>
@@ -896,7 +1016,7 @@ Host: localhost:8080</code></pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_response_3"><a class="link" href="#_response_3">Response</a></h3>
+<h3 id="_response_4"><a class="link" href="#_response_4">Response</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -943,7 +1063,7 @@ Host: localhost:8080</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "rt" : 200,
   "rtMsg" : "OK",
-  "contentsId" : 7748229010756508263
+  "contentsId" : 5173664722337383179
 }</code></pre>
 </div>
 </div>
@@ -954,7 +1074,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version <br>
-Last updated 2022-08-07 08:36:18 +0900
+Last updated 2022-08-08 01:17:17 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

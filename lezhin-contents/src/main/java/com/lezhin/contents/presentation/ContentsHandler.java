@@ -5,10 +5,12 @@ import com.lezhin.contents.infrastructure.exception.status.BadRequestException;
 import com.lezhin.contents.infrastructure.exception.status.ExceptionMessage;
 import com.lezhin.contents.presentation.request.ContentsRequestMapper;
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
+import com.lezhin.contents.presentation.request.PricingModifyRequest;
 import com.lezhin.contents.presentation.response.ContentsResponseMapper;
 import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
 import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
 import com.lezhin.contents.presentation.response.ExchangeContentsTokenResponse;
+import com.lezhin.contents.presentation.shared.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
@@ -76,5 +78,25 @@ public class ContentsHandler {
         return ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(response, ExchangeContentsTokenResponse.class);
+    }
+
+    /**
+     * 가격 변경
+     * @param serverRequest: 변경할 가격 정보
+     * @return ServerResponse: 처리 완료
+     */
+    public Mono<ServerResponse> pricingModify(ServerRequest serverRequest) {
+
+        return serverRequest.bodyToMono(PricingModifyRequest.class)
+            .switchIfEmpty(Mono.error(new BadRequestException(ExceptionMessage.IsRequiredRequest.getMessage())))
+            .flatMap(request -> {
+                request.verify(); // Request 유효성 검사
+
+                return contentsFacade.pricingModify(contentsRequestMapper.of(request))
+                    .then(
+                        ok().contentType(MediaType.APPLICATION_JSON)
+                            .body(Mono.just(new SuccessResponse()), SuccessResponse.class)
+                    );
+            });
     }
 }
