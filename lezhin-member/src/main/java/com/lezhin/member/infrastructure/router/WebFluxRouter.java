@@ -24,12 +24,12 @@ public class WebFluxRouter implements WebFluxConfigurer {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> memberRouterBuilder(MemberHandler memberHandler) {
+    public RouterFunction<ServerResponse> routerBuilder(MemberHandler memberHandler) {
 
         return RouterFunctions.route()
             .resources("/**", new ClassPathResource("static/docs")) // API 문서 제공
-            .path(RouterPathPattern.EXCHANGE_ROOT.getPath(), memberBuilder ->
-                memberBuilder
+            .path(RouterPathPattern.EXCHANGE_ROOT.getPath(), builder ->
+                builder
                     .GET(RouterPathPattern.EXCHANGE_MEMBER_TOKEN.getPath(), memberHandler::exchangeMemberToken) // 회원 고유번호 가져오기
             )
             .build();

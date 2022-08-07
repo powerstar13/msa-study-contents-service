@@ -9,4 +9,6 @@ public interface ContentsService {
     Mono<ContentsDTO.EvaluationTokenInfo> evaluationRegister(ContentsCommand.ExchangedMemberIdForEvaluationRegister command);
 
     Mono<ContentsDTO.EvaluationTop3Contents> evaluationTop3Contents();
+
+    Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken);
 }

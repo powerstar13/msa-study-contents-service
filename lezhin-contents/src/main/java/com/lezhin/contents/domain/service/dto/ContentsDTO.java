@@ -69,4 +69,19 @@ public class ContentsDTO {
                 + "}";
         }
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class ContentsIdInfo {
+
+        private long contentsId; // 작품 고유번호
+
+        @Override
+        public String toString() {
+            return "{"
+                + "\"contentsId\":" + contentsId
+                + "}";
+        }
+    }
 }

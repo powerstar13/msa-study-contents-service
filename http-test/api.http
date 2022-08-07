@@ -17,3 +17,8 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIy
 GET http://localhost:8080/contents/evaluation-top3
 Accept: application/json
 Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIyZi05MzkwLTFiMGMyMjA2YmNiZSIsImlhdCI6MTY1OTc2NDY4NywiZXhwIjoyNjA1ODQ0Njg3fQ.d82eq4XecwOczhNFmay9bQ6N9IXjXAE_1wlg7Ox_dTc
+
+### 작품별 조회 이력 페이지
+GET http://localhost:8080/history/contents/page?page=1&size=10&contentsToken=4ff3f414-7a5e-4ce1-8234-76788b5eff01
+Accept: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIyZi05MzkwLTFiMGMyMjA2YmNiZSIsImlhdCI6MTY1OTc2NDY4NywiZXhwIjoyNjA1ODQ0Njg3fQ.d82eq4XecwOczhNFmay9bQ6N9IXjXAE_1wlg7Ox_dTc

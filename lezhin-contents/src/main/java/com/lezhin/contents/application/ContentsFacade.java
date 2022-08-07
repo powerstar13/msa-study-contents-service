@@ -42,4 +42,13 @@ public class ContentsFacade {
     public Mono<ContentsDTO.EvaluationTop3Contents> evaluationTop3Contents() {
         return contentsService.evaluationTop3Contents(); // 좋아요/싫어요 Top3 작품 조회 처리
     }
+
+    /**
+     * 작품 고유번호 가져오기
+     * @param contentsToken: 작품 대체 식별키
+     * @return ContentsIdInfo: 작품 고유번호
+     */
+    public Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken) {
+        return contentsService.exchangeContentsToken(contentsToken); // 작품 고유번호 가져오기 처리
+    }
 }

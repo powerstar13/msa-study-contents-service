@@ -40,3 +40,7 @@ include::{snippets}/contents/evaluation-top3/request-parameters.adoc[]
 === Response
 include::{snippets}/contents/evaluation-top3/response-fields.adoc[]
 include::{snippets}/contents/evaluation-top3/response-body.adoc[]
+
+---
+
+include::{docdir}/webClient.adoc[]
