@@ -5,7 +5,6 @@ import com.lezhin.member.domain.service.MemberService;
 import com.lezhin.member.infrastructure.exception.status.BadRequestException;
 import com.lezhin.member.infrastructure.webClient.ContentsWebClientService;
 import com.lezhin.member.infrastructure.webClient.HistoryWebClientService;
-import com.lezhin.member.infrastructure.webClient.response.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -33,18 +32,13 @@ public class MemberFacade {
      */
     public Mono<Void> memberDelete(String memberToken) {
 
-        return memberService.exchangeMemberToken(memberToken) // 1. 회원 고유번호 가져오기 처리
-            .flatMap(memberIdInfo -> {
-                long memberId = memberIdInfo.getMemberId();
+        return contentsWebClientService.evaluationDeleteByMember(memberToken) // 1. 평가 삭제 처리
+            .zipWith(historyWebClientService.historyDeleteByMember(memberToken)) // 2. 이력 삭제 처리
+            .flatMap(objects -> {
+                if (objects.getT1().getRt() != 200) return Mono.error(new BadRequestException(objects.getT1().getRtMsg()));
+                if (objects.getT2().getRt() != 200) return Mono.error(new BadRequestException(objects.getT2().getRtMsg()));
 
-                return contentsWebClientService.evaluationDeleteByMemberDelete(memberId) // 2. 평가 삭제 처리
-                    .zipWith(historyWebClientService.historyDeleteByMemberDelete(memberId)) // 3. 이력 삭제 처리
-                    .flatMap(objects -> {
-                        if (objects.getT1().getRt() != 200) return Mono.error(new BadRequestException(objects.getT1().getRtMsg()));
-                        if (objects.getT2().getRt() != 200) return Mono.error(new BadRequestException(objects.getT2().getRtMsg()));
-
-                        return memberService.memberDelete(memberId); // 4. 회원 삭제 처리
-                    });
+                return memberService.memberDelete(memberToken); // 3. 회원 삭제 처리
             });
     }
 }

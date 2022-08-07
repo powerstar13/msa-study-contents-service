@@ -2,7 +2,6 @@ package com.lezhin.member.domain.service;
 
 import com.lezhin.member.domain.Member;
 import com.lezhin.member.domain.dto.MemberDTO;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import java.util.UUID;
 import static com.lezhin.member.infrastructure.factory.MemberTestFactory.memberMono;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -35,11 +34,11 @@ class MemberServiceTest {
     @Test
     void exchangeMemberToken() {
 
-        given(memberReader.findByMemberToken(any(String.class))).willReturn(memberMono());
+        given(memberReader.findByMemberToken(anyString())).willReturn(memberMono());
 
         Mono<MemberDTO.MemberIdInfo> result = memberService.exchangeMemberToken(UUID.randomUUID().toString());
 
-        verify(memberReader).findByMemberToken(any(String.class));
+        verify(memberReader).findByMemberToken(anyString());
 
         StepVerifier.create(result.log())
             .assertNext(memberIdInfo -> assertTrue(memberIdInfo.getMemberId() > 0))
@@ -50,12 +49,12 @@ class MemberServiceTest {
     @Test
     void memberDelete() {
 
-        given(memberReader.findByMemberId(anyLong())).willReturn(memberMono());
+        given(memberReader.findByMemberToken(anyString())).willReturn(memberMono());
         given(memberStore.memberDelete(any(Member.class))).willReturn(Mono.empty());
 
-        Mono<Void> result = memberService.memberDelete(RandomUtils.nextLong());
+        Mono<Void> result = memberService.memberDelete(UUID.randomUUID().toString());
 
-        verify(memberReader).findByMemberId(anyLong());
+        verify(memberReader).findByMemberToken(anyString());
 
         StepVerifier.create(result.log())
             .expectNextCount(0)

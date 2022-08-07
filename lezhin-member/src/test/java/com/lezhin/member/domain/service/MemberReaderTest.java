@@ -2,7 +2,6 @@ package com.lezhin.member.domain.service;
 
 import com.lezhin.member.domain.Member;
 import com.lezhin.member.infrastructure.dao.MemberRepository;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import java.util.UUID;
 
 import static com.lezhin.member.infrastructure.factory.MemberTestFactory.memberMono;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -38,21 +36,6 @@ class MemberReaderTest {
         Mono<Member> result = memberReader.findByMemberToken(UUID.randomUUID().toString());
 
         verify(memberRepository).findByMemberToken(any(String.class));
-
-        StepVerifier.create(result.log())
-            .assertNext(Assertions::assertNotNull)
-            .verifyComplete();
-    }
-
-    @DisplayName("회원 고유번호로 회원 정보 조회")
-    @Test
-    void findByMemberId() {
-
-        given(memberRepository.findByMemberId(anyLong())).willReturn(memberMono());
-
-        Mono<Member> result = memberReader.findByMemberId(RandomUtils.nextLong());
-
-        verify(memberRepository).findByMemberId(anyLong());
 
         StepVerifier.create(result.log())
             .assertNext(Assertions::assertNotNull)

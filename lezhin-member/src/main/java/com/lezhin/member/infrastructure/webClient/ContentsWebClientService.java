@@ -20,13 +20,13 @@ public class ContentsWebClientService {
 
     /**
      * 평가 삭제
-     * @param memberId : 회원 대체 식별키
+     * @param memberToken : 회원 대체 식별키
      * @return CommonResponse : 처리 결과
      */
-    public Mono<CommonResponse> evaluationDeleteByMemberDelete(long memberId) {
+    public Mono<CommonResponse> evaluationDeleteByMember(String memberToken) {
 
         return webClient.get()
-            .uri("/evaluation-delete/by-member-delete/" + memberId)
+            .uri("/delete/evaluation-by-member/" + memberToken)
             .retrieve()
             .onStatus(HttpStatus::is5xxServerError,
                 response -> Mono.error(new RuntimeException(ExceptionMessage.ServerError.getMessage()))

@@ -7,5 +7,5 @@ public interface MemberService {
 
     Mono<MemberDTO.MemberIdInfo> exchangeMemberToken(String memberToken);
 
-    Mono<Void> memberDelete(long memberId);
+    Mono<Void> memberDelete(String memberToken);
 }

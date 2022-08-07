@@ -26,12 +26,12 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 회원 삭제 처리
-     * @param memberId: 회원 고유번호
+     * @param memberToken: 회원 대체 식별키
      */
     @Override
-    public Mono<Void> memberDelete(long memberId) {
+    public Mono<Void> memberDelete(String memberToken) {
 
-        return memberReader.findByMemberId(memberId) // 1. 회원 정보 조회
+        return memberReader.findByMemberToken(memberToken) // 1. 회원 정보 조회
             .flatMap(memberStore::memberDelete); // 2. 회원 삭제
     }
 }

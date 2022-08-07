@@ -18,7 +18,7 @@ import static com.lezhin.member.infrastructure.factory.MemberTestFactory.commonR
 import static com.lezhin.member.infrastructure.factory.MemberTestFactory.memberIdInfoMono;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -54,14 +54,14 @@ class MemberFacadeTest {
     @Test
     void memberDelete() {
 
-        given(memberService.exchangeMemberToken(any(String.class))).willReturn(memberIdInfoMono());
-        given(contentsWebClientService.evaluationDeleteByMemberDelete(anyLong())).willReturn(commonResponseMono());
-        given(historyWebClientService.historyDeleteByMemberDelete(anyLong())).willReturn(commonResponseMono());
-        given(memberService.memberDelete(anyLong())).willReturn(Mono.empty());
+        given(contentsWebClientService.evaluationDeleteByMember(anyString())).willReturn(commonResponseMono());
+        given(historyWebClientService.historyDeleteByMember(anyString())).willReturn(commonResponseMono());
+        given(memberService.memberDelete(anyString())).willReturn(Mono.empty());
 
         Mono<Void> result = memberFacade.memberDelete(UUID.randomUUID().toString());
 
-        verify(memberService).exchangeMemberToken(any(String.class));
+        verify(contentsWebClientService).evaluationDeleteByMember(anyString());
+        verify(historyWebClientService).historyDeleteByMember(anyString());
 
         StepVerifier.create(result.log())
             .expectNextCount(0)

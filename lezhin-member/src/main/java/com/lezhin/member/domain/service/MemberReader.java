@@ -6,6 +6,4 @@ import reactor.core.publisher.Mono;
 public interface MemberReader {
 
     Mono<Member> findByMemberToken(String memberToken);
-
-    Mono<Member> findByMemberId(long memberId);
 }

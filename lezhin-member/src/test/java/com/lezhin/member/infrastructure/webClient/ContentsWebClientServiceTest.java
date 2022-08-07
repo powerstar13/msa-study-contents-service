@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lezhin.member.infrastructure.webClient.response.CommonResponse;
 import mockwebserver3.MockResponse;
 import mockwebserver3.MockWebServer;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +17,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import static com.lezhin.member.infrastructure.factory.MemberTestFactory.commonResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,14 +46,14 @@ class ContentsWebClientServiceTest {
 
     @DisplayName("평가 삭제")
     @Test
-    void evaluationDeleteByMemberDelete() throws JsonProcessingException {
+    void evaluationDeleteByMember() throws JsonProcessingException {
 
         mockWebServer.enqueue(new MockResponse()
             .setBody(objectMapper.writeValueAsString(commonResponse()))
             .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         );
 
-        Mono<CommonResponse> result = contentsWebClientService.evaluationDeleteByMemberDelete(RandomUtils.nextLong());
+        Mono<CommonResponse> result = contentsWebClientService.evaluationDeleteByMember(UUID.randomUUID().toString());
 
         StepVerifier.create(result.log())
             .assertNext(response -> assertEquals(HttpStatus.OK.value(), response.getRt()))

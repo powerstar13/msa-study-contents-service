@@ -20,13 +20,13 @@ public class HistoryWebClientService {
 
     /**
      * 이력 삭제
-     * @param memberId : 회원 대체 식별키
+     * @param memberToken : 회원 대체 식별키
      * @return CommonResponse : 처리 결과
      */
-    public Mono<CommonResponse> historyDeleteByMemberDelete(long memberId) {
+    public Mono<CommonResponse> historyDeleteByMember(String memberToken) {
 
         return webClient.get()
-            .uri("/history-delete/by-member-delete/" + memberId)
+            .uri("/delete/history-by-member/" + memberToken)
             .retrieve()
             .onStatus(HttpStatus::is5xxServerError,
                 response -> Mono.error(new RuntimeException(ExceptionMessage.ServerError.getMessage()))
