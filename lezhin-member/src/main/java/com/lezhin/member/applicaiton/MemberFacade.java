@@ -46,6 +46,5 @@ public class MemberFacade {
                         return memberService.memberDelete(memberId); // 4. 회원 삭제 처리
                     });
             });
-
     }
 }
