@@ -17,7 +17,7 @@ import java.util.List;
 public class ContentsHistoryPageResponse extends SuccessResponse {
 
     private PageResponseDTO pageInfo; // 페이지 정보
-    private List<HistoryResponseDTO.HistoryMemberInfo> historyList; // 데이터 목록
+    private List<HistoryResponseDTO.ContentsHistoryMemberInfo> historyList; // 데이터 목록
 
     @Override
     public String toString() {

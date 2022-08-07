@@ -30,3 +30,13 @@ include::{snippets}/history/contents/page/request-parameters.adoc[]
 === Response
 include::{snippets}/history/contents/page/response-fields.adoc[]
 include::{snippets}/history/contents/page/response-body.adoc[]
+
+[[search-history-page]]
+== 사용자 조회 이력 페이지
+=== Http
+include::{snippets}/history/search/page/http-request.adoc[]
+=== Request
+include::{snippets}/history/search/page/request-parameters.adoc[]
+=== Response
+include::{snippets}/history/search/page/response-fields.adoc[]
+include::{snippets}/history/search/page/response-body.adoc[]

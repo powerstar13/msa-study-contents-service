@@ -15,10 +15,20 @@ public class HistoryServiceImpl implements HistoryService {
     /**
      * 작품별 조회 이력 페이지
      * @param command: 조회할 정보
-     * @return ContentsHistoryPage: 이력 페이지
+     * @return HistoryPage: 이력 페이지
      */
     @Override
     public Mono<HistoryDTO.ContentsHistoryPage> contentsHistoryPage(HistoryCommand.ExchangedContentsHistoryPage command) {
         return historyReader.findAllContentsHistoryPage(command); // 작품별 조회 이력 페이지 조회
+    }
+
+    /**
+     * 사용자 조회 이력 페이지
+     * @param command: 조회할 정보
+     * @return HistoryPage: 이력 페이지
+     */
+    @Override
+    public Mono<HistoryDTO.SearchHistoryPage> searchHistoryPage(HistoryCommand.SearchHistoryPage command) {
+        return historyReader.findAllSearchHistoryPage(command); // 사용자 조회 이력 페이지 조회
     }
 }

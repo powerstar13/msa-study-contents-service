@@ -17,7 +17,7 @@ public class HistoryDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class HistoryMemberInfo {
+    public static class ContentsHistoryMemberInfo {
 
         private String historyToken; // 이력 대체 식별키
         private MemberType memberType; // 회원 유형
@@ -45,13 +45,49 @@ public class HistoryDTO {
     public static class ContentsHistoryPage {
 
         private pageInfo pageInfo; // 페이지 정보
-        private List<HistoryMemberInfo> historyList; // 이력 목록
+        private List<ContentsHistoryMemberInfo> historyList; // 이력 목록
 
         @Override
         public String toString() {
             return "{"
                 + "\"pageInfo\":" + pageInfo
                 + ", \"historyList\":" + historyList
+                + "}";
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class SearchHistoryMemberInfo {
+
+        private MemberType memberType; // 회원 유형
+        private String memberEmail; // 회원 이메일
+        private String memberName; // 회원 이름
+        private MemberGender memberGender; // 회원 성별
+
+        @Override
+        public String toString() {
+            return "{"
+                + "\"memberType\":\"" + memberType + "\""
+                + ", \"memberEmail\":\"" + memberEmail + "\""
+                + ", \"memberName\":\"" + memberName + "\""
+                + ", \"memberGender\":\"" + memberGender + "\""
+                + "}";
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class SearchHistoryPage {
+
+        private pageInfo pageInfo; // 페이지 정보
+        private List<SearchHistoryMemberInfo> memberList; // 회원 목록
+
+        @Override
+        public String toString() {
+            return "{"
+                + "\"pageInfo\":" + pageInfo
+                + ", \"memberList\":" + memberList
                 + "}";
         }
     }
