@@ -53,4 +53,21 @@ public class ContentsStoreImpl implements ContentsStore {
         return contentsRepository.save(contents)
             .then();
     }
+
+    /**
+     * 평가 삭제
+     * @param contents: 작품 레퍼런스
+     * @param evaluation: 평가 레퍼런스
+     */
+    @Override
+    public Mono<Void> evaluationDelete(Contents contents, Evaluation evaluation) {
+
+        // 좋아요/싫어요 해제
+        if (evaluation.getEvaluationType().equals(EvaluationType.LIKE)) contents.likeDown();
+        else contents.dislikeDown();
+
+        return contentsRepository.save(contents) // 작품 정보 업데이트 처리
+            .zipWith(evaluationRepository.delete(evaluation)) // 평가 정보 삭제 처리
+            .then();
+    }
 }

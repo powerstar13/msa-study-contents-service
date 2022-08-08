@@ -46,6 +46,12 @@ public class WebFluxRouter implements WebFluxConfigurer {
                 builder
                     .GET(RouterPathPattern.EXCHANGE_CONTENTS_TOKEN.getPath(), contentsHandler::exchangeContentsToken) // 작품 고유번호 가져오기
             )
+            .path(RouterPathPattern.DELETE_ROOT.getPath(), builder1 ->
+                builder1.nest(accept(MediaType.APPLICATION_JSON), builder2 ->
+                    builder2
+                        .DELETE(RouterPathPattern.DELETE_EVALUATION_BY_MEMBER.getPath(), contentsHandler::evaluationDeleteByMember) // 평가 삭제
+                )
+            )
             .build();
     }
 }

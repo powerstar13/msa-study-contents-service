@@ -3,7 +3,9 @@ package com.lezhin.contents.domain.service;
 import com.lezhin.contents.application.dto.ContentsCommand;
 import com.lezhin.contents.application.dto.ContentsCommandMapper;
 import com.lezhin.contents.domain.Contents;
+import com.lezhin.contents.domain.Evaluation;
 import com.lezhin.contents.domain.service.dto.ContentsDTO;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,11 +76,11 @@ class ContentsServiceTest {
     @Test
     void exchangeContentsToken() {
 
-        given(contentsReader.findByContentsToken(any(String.class))).willReturn(contentsMono());
+        given(contentsReader.findByContentsToken(anyString())).willReturn(contentsMono());
 
         Mono<ContentsDTO.ContentsIdInfo> result = contentsService.exchangeContentsToken(UUID.randomUUID().toString());
 
-        verify(contentsReader).findByContentsToken(any(String.class));
+        verify(contentsReader).findByContentsToken(anyString());
 
         StepVerifier.create(result.log())
             .assertNext(contentsIdInfo -> assertTrue(contentsIdInfo.getContentsId() > 0))
@@ -90,12 +92,29 @@ class ContentsServiceTest {
     void pricingModify() {
         ContentsCommand.PricingModify command = pricingModifyCommand();
 
-        given(contentsReader.findByContentsToken(any(String.class))).willReturn(contentsMono());
+        given(contentsReader.findByContentsToken(anyString())).willReturn(contentsMono());
         given(contentsStore.pricingModify(any(Contents.class), any(ContentsCommand.PricingModify.class))).willReturn(Mono.empty());
 
         Mono<Void> result = contentsService.pricingModify(command);
 
-        verify(contentsReader).findByContentsToken(any(String.class));
+        verify(contentsReader).findByContentsToken(anyString());
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
+            .verifyComplete();
+    }
+
+    @DisplayName("평가 삭제 처리")
+    @Test
+    void evaluationDeleteByMember() {
+
+        given(contentsReader.findEvaluationListByMemberId(anyLong())).willReturn(evaluationFlux());
+        given(contentsReader.findContentsByContentsId(anyLong())).willReturn(contentsMono());
+        given(contentsStore.evaluationDelete(any(Contents.class), any(Evaluation.class))).willReturn(Mono.empty());
+
+        Mono<Void> result = contentsService.evaluationDeleteByMember(RandomUtils.nextLong());
+
+        verify(contentsReader).findEvaluationListByMemberId(anyLong());
 
         StepVerifier.create(result.log())
             .expectNextCount(0)

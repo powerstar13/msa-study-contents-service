@@ -59,4 +59,18 @@ public class ContentsFacade {
     public Mono<Void> pricingModify(ContentsCommand.PricingModify command) {
        return contentsService.pricingModify(command); // 가격 변경 처리
     }
+
+    /**
+     * 평가 삭제
+     * @param memberToken: 회원 대체 식별키
+     */
+    public Mono<Void> evaluationDeleteByMember(String memberToken) {
+
+        return memberWebClientService.exchangeMemberToken(memberToken) // 1. 회원 대체 식별키로 회원 고유번호 가져오기
+            .flatMap(exchangeMemberTokenResponse -> {
+                if (exchangeMemberTokenResponse.getRt() != 200) return Mono.error(new BadRequestException(exchangeMemberTokenResponse.getRtMsg()));
+
+                return contentsService.evaluationDeleteByMember(exchangeMemberTokenResponse.getMemberId()); // 2. 평가 삭제 처리
+            });
+    }
 }

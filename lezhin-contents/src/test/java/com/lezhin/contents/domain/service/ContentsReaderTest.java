@@ -2,17 +2,21 @@ package com.lezhin.contents.domain.service;
 
 import com.lezhin.contents.application.dto.ContentsCommand;
 import com.lezhin.contents.domain.Contents;
+import com.lezhin.contents.domain.Evaluation;
+import com.lezhin.contents.domain.EvaluationType;
 import com.lezhin.contents.domain.service.dto.ContentsDTO;
 import com.lezhin.contents.domain.service.dto.ContentsDTOMapper;
 import com.lezhin.contents.infrastructure.dao.ContentsRepository;
 import com.lezhin.contents.infrastructure.dao.EvaluationRepository;
 import com.lezhin.contents.infrastructure.exception.status.AlreadyDataException;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -103,6 +107,37 @@ class ContentsReaderTest {
                 assertEquals(3, evaluationTop3Contents.getLikeTop3Contents().size());
                 assertEquals(3, evaluationTop3Contents.getDislikeTop3Contents().size());
             }))
+            .verifyComplete();
+    }
+
+    @DisplayName("회원이 평가한 목록 조회")
+    @Test
+    void findEvaluationListByMemberId() {
+
+        given(evaluationRepository.findAllByMemberId(anyLong())).willReturn(evaluationFlux());
+
+        Flux<Evaluation> result = contentsReader.findEvaluationListByMemberId(RandomUtils.nextLong());
+
+        verify(evaluationRepository).findAllByMemberId(anyLong());
+
+        StepVerifier.create(result.log())
+            .assertNext(evaluation -> assertEquals(EvaluationType.LIKE, evaluation.getEvaluationType()))
+            .assertNext(evaluation -> assertEquals(EvaluationType.DISLIKE, evaluation.getEvaluationType()))
+            .verifyComplete();
+    }
+
+    @DisplayName("작품 정보 조회")
+    @Test
+    void findContentsByContentsId() {
+
+        given(contentsRepository.findByContentsId(anyLong())).willReturn(contentsMono());
+
+        Mono<Contents> result = contentsReader.findContentsByContentsId(RandomUtils.nextLong());
+
+        verify(contentsRepository).findByContentsId(anyLong());
+
+        StepVerifier.create(result.log())
+            .assertNext(Assertions::assertNotNull)
             .verifyComplete();
     }
 }

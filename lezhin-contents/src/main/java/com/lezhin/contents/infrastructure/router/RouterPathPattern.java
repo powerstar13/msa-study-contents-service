@@ -13,7 +13,10 @@ public enum RouterPathPattern {
     PRICING_MODIFY("/pricing-modify", "/contents/pricing-modify"),
 
     EXCHANGE_ROOT("/exchange", "/exchange/**"),
-    EXCHANGE_CONTENTS_TOKEN("/contents-token/{contentsToken}", "/exchange/contents-token/{contentsToken}");
+    EXCHANGE_CONTENTS_TOKEN("/contents-token/{contentsToken}", "/exchange/contents-token/{contentsToken}"),
+
+    DELETE_ROOT("/delete", "/delete/**"),
+    DELETE_EVALUATION_BY_MEMBER("/evaluation-by-member/{memberToken}", "/delete/evaluation-by-member/{memberToken}");
 
     private final String path;
     private final String fullPath;

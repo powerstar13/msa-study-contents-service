@@ -13,4 +13,6 @@ public interface ContentsRepository extends ReactiveCrudRepository<Contents, Lon
 
     Flux<Contents> findTop3ByLikeCountGreaterThanOrderByLikeCountDesc(long likeCount);
     Flux<Contents> findTop3ByDislikeCountGreaterThanOrderByDislikeCountDesc(long dislikeCount);
+
+    Mono<Contents> findByContentsId(long contentsId);
 }

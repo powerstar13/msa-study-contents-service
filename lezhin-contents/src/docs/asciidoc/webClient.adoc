@@ -27,3 +27,13 @@ include::{snippets}/exchange/contents-token/{contentsToken}/path-parameters.adoc
 === Response
 include::{snippets}/exchange/contents-token/{contentsToken}/response-fields.adoc[]
 include::{snippets}/exchange/contents-token/{contentsToken}/response-body.adoc[]
+
+[[evaluation-delete-by-member]]
+== 평가 삭제
+=== Http
+include::{snippets}/delete/evaluation-by-member/{memberToken}/http-request.adoc[]
+=== Request
+include::{snippets}/delete/evaluation-by-member/{memberToken}/path-parameters.adoc[]
+=== Response
+include::{snippets}/delete/evaluation-by-member/{memberToken}/response-fields.adoc[]
+include::{snippets}/delete/evaluation-by-member/{memberToken}/response-body.adoc[]

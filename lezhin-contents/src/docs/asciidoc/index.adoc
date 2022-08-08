@@ -41,7 +41,6 @@ include::{snippets}/contents/evaluation-top3/request-parameters.adoc[]
 include::{snippets}/contents/evaluation-top3/response-fields.adoc[]
 include::{snippets}/contents/evaluation-top3/response-body.adoc[]
 
-
 [[pricing-modify]]
 == 가격 변경
 === Http
@@ -51,7 +50,6 @@ include::{snippets}/contents/pricing-modify/request-fields.adoc[]
 === Response
 include::{snippets}/contents/pricing-modify/response-fields.adoc[]
 include::{snippets}/contents/pricing-modify/response-body.adoc[]
-
 
 ---
 

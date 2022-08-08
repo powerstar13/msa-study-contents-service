@@ -9,6 +9,7 @@ public enum ExceptionMessage {
 
     IsRequiredRequest("BadRequestException", "Request를 전달해주세요."),
     IsRequiredMemberToken("BadRequestException", "회원 대체 식별키를 전달해주세요."),
+    IsRequiredMemberId("BadRequestException", "회원 대체 식별키를 전달해주세요."),
     IsRequiredContentsToken("BadRequestException", "작품 대체 식별키를 전달해주세요."),
     IsRequiredContentsType("BadRequestException", "평가 유형을 전달해주세요."),
     IsRequiredPricingType("BadRequestException", "가격 유형을 전달해주세요."),

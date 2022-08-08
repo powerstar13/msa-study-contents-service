@@ -70,4 +70,20 @@ public class ContentsServiceImpl implements ContentsService {
                 return contentsStore.pricingModify(contents, command); // 2. 가격 변경
             });
     }
+
+    /**
+     * 평가 삭제 처리
+     * @param memberId: 회원 고유번호
+     */
+    @Override
+    public Mono<Void> evaluationDeleteByMember(long memberId) {
+
+        return contentsReader.findEvaluationListByMemberId(memberId) // 1. 평가 목록 조회
+            .flatMap(evaluation ->
+                contentsReader.findContentsByContentsId(evaluation.getContentsId()) // 2. 작품 정보 조회
+                    .flatMap(contents -> contentsStore.evaluationDelete(contents, evaluation)) // 3. 평가 삭제
+            )
+            .then();
+
+    }
 }

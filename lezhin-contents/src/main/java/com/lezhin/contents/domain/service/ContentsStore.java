@@ -10,4 +10,6 @@ public interface ContentsStore {
     Mono<Evaluation> evaluationRegister(Contents contents, ContentsCommand.ExchangedContentsIdForEvaluationRegister command);
 
     Mono<Void> pricingModify(Contents contents, ContentsCommand.PricingModify command);
+
+    Mono<Void> evaluationDelete(Contents contents, Evaluation evaluation);
 }
