@@ -13,6 +13,7 @@ import com.lezhin.history.presentation.response.ContentsHistoryPageResponse;
 import com.lezhin.history.presentation.response.HistoryResponseMapper;
 import com.lezhin.history.presentation.response.SearchHistoryPageResponse;
 import com.lezhin.history.presentation.shared.WebFluxSharedHandlerTest;
+import com.lezhin.history.presentation.shared.response.SuccessResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.UUID;
@@ -32,15 +34,13 @@ import static com.lezhin.history.infrastructure.restdocs.RestdocsDocumentFormat.
 import static com.lezhin.history.infrastructure.restdocs.RestdocsDocumentUtil.requestPrettyPrint;
 import static com.lezhin.history.infrastructure.restdocs.RestdocsDocumentUtil.responsePrettyPrint;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 
 @WebFluxTest(HistoryHandler.class)
@@ -193,6 +193,45 @@ class HistoryHandlerTest extends WebFluxSharedHandlerTest {
                 assertEquals(HttpStatus.OK.value(), response.getRt());
                 assertNotNull(response.getMemberList());
             }))
+            .verifyComplete();
+    }
+
+    @DisplayName("이력 삭제")
+    @Test
+    void historyDeleteByMember() {
+        // given
+        given(historyFacade.historyDeleteByMember(anyString())).willReturn(Mono.empty());
+
+        // when
+        final String URI = RouterPathPattern.DELETE_HISTORY_BY_MEMBER.getFullPath();
+        WebTestClient.ResponseSpec result = webClient
+            .delete()
+            .uri(URI, UUID.randomUUID().toString())
+            .header(AUTHORIZATION, "accessToken")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange();
+
+        result.expectStatus().isOk()
+            .expectBody()
+            .consumeWith(document(URI,
+                requestPrettyPrint(),
+                responsePrettyPrint(),
+                pathParameters(
+                    parameterWithName("memberToken").description("회원 대체 식별키")
+                ),
+                responseFields(
+                    fieldWithPath("rt").type(JsonFieldType.NUMBER).description("결과 코드"),
+                    fieldWithPath("rtMsg").type(JsonFieldType.STRING).description("결과 메시지")
+                )
+            ));
+
+        FluxExchangeResult<SuccessResponse> flux = result.returnResult(SuccessResponse.class);
+
+        // then
+        verify(historyFacade).historyDeleteByMember(anyString());
+
+        StepVerifier.create(flux.getResponseBody().log())
+            .assertNext(response -> assertEquals(HttpStatus.OK.value(), response.getRt()))
             .verifyComplete();
     }
 }

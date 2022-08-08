@@ -1,6 +1,7 @@
 package com.lezhin.history.infrastructure.dao;
 
 import com.lezhin.history.applicaiton.dto.HistoryCommand;
+import com.lezhin.history.domain.History;
 import com.lezhin.history.domain.service.HistoryReader;
 import com.lezhin.history.domain.service.dto.ContentsHistoryDTOMapper;
 import com.lezhin.history.domain.service.dto.HistoryDTO;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -54,5 +56,15 @@ public class HistoryReaderImpl implements HistoryReader {
     @Override
     public Mono<HistoryDTO.SearchHistoryPage> findAllSearchHistoryPage(HistoryCommand.SearchHistoryPage command) {
         return historyRepository.getSearchHistoryPage(command);
+    }
+
+    /**
+     * 회원이 조회한 이력 목록 조회
+     * @param memberId: 회원 고유번호
+     * @return Evaluation: 이력 목록
+     */
+    @Override
+    public Flux<History> findHistoryListByMemberId(long memberId) {
+        return historyRepository.findAllByMemberId(memberId); // 이력 정보 조회 처리
     }
 }

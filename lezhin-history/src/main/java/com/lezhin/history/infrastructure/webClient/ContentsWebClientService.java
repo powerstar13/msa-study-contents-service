@@ -26,7 +26,7 @@ public class ContentsWebClientService {
     public Mono<ExchangeContentsTokenResponse> exchangeContentsToken(String contentsToken) {
 
         return webClient.get()
-            .uri("/exchange/contents-token/" + contentsToken)
+            .uri(WebClientPathPattern.EXCHANGE_CONTENTS_TOKEN.getFullPath(), contentsToken)
             .retrieve()
             .onStatus(HttpStatus::is5xxServerError,
                 response -> Mono.error(new RuntimeException(ExceptionMessage.ServerError.getMessage()))

@@ -25,8 +25,8 @@ public class ContentsWebClientService {
      */
     public Mono<CommonResponse> evaluationDeleteByMember(String memberToken) {
 
-        return webClient.get()
-            .uri("/delete/evaluation-by-member/" + memberToken)
+        return webClient.delete()
+            .uri(WebClientPathPattern.DELETE_EVALUATION_BY_MEMBER.getFullPath(), memberToken)
             .retrieve()
             .onStatus(HttpStatus::is5xxServerError,
                 response -> Mono.error(new RuntimeException(ExceptionMessage.ServerError.getMessage()))

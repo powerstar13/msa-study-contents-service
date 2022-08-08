@@ -7,6 +7,7 @@ import com.lezhin.history.domain.MemberGender;
 import com.lezhin.history.domain.MemberType;
 import com.lezhin.history.domain.service.dto.HistoryDTO;
 import com.lezhin.history.infrastructure.webClient.response.ExchangeContentsTokenResponse;
+import com.lezhin.history.infrastructure.webClient.response.ExchangeMemberTokenResponse;
 import com.lezhin.history.presentation.request.ContentsHistoryPageRequest;
 import com.lezhin.history.presentation.request.SearchHistoryPageRequest;
 import com.lezhin.history.presentation.response.ContentsHistoryPageResponse;
@@ -20,6 +21,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class HistoryTestFactory {
@@ -52,6 +54,10 @@ public class HistoryTestFactory {
 
     public static Flux<History> historyFlux() {
         return Flux.just(history(), history());
+    }
+
+    public static List<History> historyList() {
+        return Arrays.asList(history(), history());
     }
 
     public static HistoryDTO.ContentsHistoryMemberInfo contentsHistoryMemberInfoDTO() {
@@ -124,6 +130,22 @@ public class HistoryTestFactory {
     public static Mono<ExchangeContentsTokenResponse> exchangeContentsTokenResponseMono() {
 
         return Mono.just(exchangeContentsTokenResponse());
+    }
+
+    /**
+     * 회원 고유번호 가져오기 통신 결과
+     */
+    public static ExchangeMemberTokenResponse exchangeMemberTokenResponse() {
+
+        return ExchangeMemberTokenResponse.builder()
+            .rt(HttpStatus.OK.value())
+            .rtMsg(HttpStatus.OK.getReasonPhrase())
+            .memberId(RandomUtils.nextLong())
+            .build();
+    }
+
+    public static Mono<ExchangeMemberTokenResponse> exchangeMemberTokenResponseMono() {
+        return Mono.just(exchangeMemberTokenResponse());
     }
 
     /**

@@ -25,8 +25,8 @@ public class HistoryWebClientService {
      */
     public Mono<CommonResponse> historyDeleteByMember(String memberToken) {
 
-        return webClient.get()
-            .uri("/delete/history-by-member/" + memberToken)
+        return webClient.delete()
+            .uri(WebClientPathPattern.DELETE_HISTORY_BY_MEMBER.getFullPath(), memberToken)
             .retrieve()
             .onStatus(HttpStatus::is5xxServerError,
                 response -> Mono.error(new RuntimeException(ExceptionMessage.ServerError.getMessage()))

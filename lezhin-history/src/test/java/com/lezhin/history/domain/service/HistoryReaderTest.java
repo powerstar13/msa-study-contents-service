@@ -5,12 +5,14 @@ import com.lezhin.history.domain.History;
 import com.lezhin.history.domain.service.dto.ContentsHistoryDTOMapper;
 import com.lezhin.history.domain.service.dto.HistoryDTO;
 import com.lezhin.history.infrastructure.dao.HistoryRepository;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -61,6 +63,21 @@ class HistoryReaderTest {
 
         StepVerifier.create(result.log())
             .assertNext(searchHistoryPage -> assertNotNull(searchHistoryPage.getMemberList()))
+            .verifyComplete();
+    }
+
+    @DisplayName("회원이 조회한 이력 목록 조회")
+    @Test
+    void findHistoryListByMemberId() {
+
+        given(historyRepository.findAllByMemberId(anyLong())).willReturn(historyFlux());
+
+        Flux<History> result = historyReader.findHistoryListByMemberId(RandomUtils.nextLong());
+
+        verify(historyRepository).findAllByMemberId(anyLong());
+
+        StepVerifier.create(result.log())
+            .expectNextCount(2)
             .verifyComplete();
     }
 }

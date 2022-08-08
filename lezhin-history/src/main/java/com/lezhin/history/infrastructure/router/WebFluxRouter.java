@@ -4,12 +4,15 @@ import com.lezhin.history.presentation.HistoryHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
+import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 @Configuration
 @EnableWebFlux
@@ -32,6 +35,12 @@ public class WebFluxRouter implements WebFluxConfigurer {
                 builder
                     .GET(RouterPathPattern.CONTENTS_HISTORY_PAGE.getPath(), historyHandler::contentsHistoryPage) // 작품별 조회 이력 페이지
                     .GET(RouterPathPattern.SEARCH_HISTORY_PAGE.getPath(), historyHandler::searchHistoryPage) // 사용자 조회 이력 페이지
+            )
+            .path(RouterPathPattern.DELETE_ROOT.getPath(), builder1 ->
+                builder1.nest(accept(MediaType.APPLICATION_JSON), builder2 ->
+                    builder2
+                        .DELETE(RouterPathPattern.DELETE_HISTORY_BY_MEMBER.getPath(), historyHandler::historyDeleteByMember) // 이력 삭제
+                )
             )
             .build();
     }

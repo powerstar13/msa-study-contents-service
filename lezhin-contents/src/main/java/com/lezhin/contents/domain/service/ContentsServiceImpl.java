@@ -84,6 +84,5 @@ public class ContentsServiceImpl implements ContentsService {
                     .flatMap(contents -> contentsStore.evaluationDelete(contents, evaluation)) // 3. 평가 삭제
             )
             .then();
-
     }
 }
