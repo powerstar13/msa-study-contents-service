@@ -94,7 +94,7 @@ class MemberHandlerTest extends WebFluxSharedHandlerTest {
 
     @DisplayName("회원 삭제")
     @Test
-    void houseDelete() {
+    void memberDelete() {
         // given
         given(memberFacade.memberDelete(any(String.class))).willReturn(Mono.empty());
 
