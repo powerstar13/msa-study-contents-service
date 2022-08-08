@@ -39,3 +39,9 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIy
   "pricingType": "PAY",
   "coin": 100
 }
+
+### 회원 삭제
+DELETE http://localhost:8080/member/delete/108358d3-72cc-47eb-8fb2-d1635c95abf7
+Content-Type: application/json
+Accept: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJUb2tlbiI6IjQ5MmJjMjEzLTVjNDctNDIyZi05MzkwLTFiMGMyMjA2YmNiZSIsImlhdCI6MTY1OTc2NDY4NywiZXhwIjoyNjA1ODQ0Njg3fQ.d82eq4XecwOczhNFmay9bQ6N9IXjXAE_1wlg7Ox_dTc

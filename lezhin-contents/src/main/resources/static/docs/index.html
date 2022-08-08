@@ -477,6 +477,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response_4">Response</a></li>
 </ul>
 </li>
+<li><a href="#evaluation-delete-by-member">평가 삭제</a>
+<ul class="sectlevel2">
+<li><a href="#_http_5">Http</a></li>
+<li><a href="#_request_5">Request</a></li>
+<li><a href="#_response_5">Response</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -504,8 +511,8 @@ Content-Length: 178
 Host: localhost:8080
 
 {
-  "memberToken" : "8977a189-3bd3-4d5a-89b6-5407e5a06a16",
-  "contentsToken" : "a0bc6544-5383-4080-bf49-42ef656aa740",
+  "memberToken" : "02007e2c-71d7-4e09-9479-03c2478db1fa",
+  "contentsToken" : "34d2e7c6-47a4-42d4-9f25-0732e1aab40b",
   "evaluationType" : "LIKE",
   "comment" : "댓글"
 }</code></pre>
@@ -611,7 +618,7 @@ Host: localhost:8080
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "rt" : 201,
   "rtMsg" : "Created",
-  "evaluationToken" : "2b850303-1077-4d6c-a12d-c970c37b964b"
+  "evaluationToken" : "1a6b8344-c926-402f-94bd-7158bef7c643"
 }</code></pre>
 </div>
 </div>
@@ -805,7 +812,7 @@ Host: localhost:8080</code></pre>
   "rt" : 200,
   "rtMsg" : "OK",
   "likeTop3Contents" : [ {
-    "contentsToken" : "cd088aaa-0604-4c3c-9f4c-6ccb59f3fe60",
+    "contentsToken" : "ee19c451-1520-4cf7-b358-4e56030b53a4",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
@@ -813,7 +820,7 @@ Host: localhost:8080</code></pre>
     "adultOnly" : "N",
     "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "d965bc40-28fc-46a1-b3da-4090a28e0f9b",
+    "contentsToken" : "2c483268-be2d-4edf-b869-d3240ae782f0",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
@@ -821,7 +828,7 @@ Host: localhost:8080</code></pre>
     "adultOnly" : "N",
     "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "18034300-713b-4a73-95b6-ce24855234dd",
+    "contentsToken" : "f90b8256-c5b4-4410-a8a1-ae7cb315200e",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
@@ -830,7 +837,7 @@ Host: localhost:8080</code></pre>
     "openAt" : "2022-08-08"
   } ],
   "dislikeTop3Contents" : [ {
-    "contentsToken" : "b6c79fcb-7407-49bc-895c-667691be24aa",
+    "contentsToken" : "33ee8bc7-a538-4368-ba38-819ad69ee3c2",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
@@ -838,7 +845,7 @@ Host: localhost:8080</code></pre>
     "adultOnly" : "N",
     "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "f5c7c809-dd56-4251-901b-7eb7e1b8a269",
+    "contentsToken" : "49fc3e49-db5b-43f2-becc-c24f6ba5dfef",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
@@ -846,7 +853,7 @@ Host: localhost:8080</code></pre>
     "adultOnly" : "N",
     "openAt" : "2022-08-08"
   }, {
-    "contentsToken" : "6f4edd04-554b-46c7-ab4c-dbaa0a95589d",
+    "contentsToken" : "cc9b4c36-2b0b-4e01-bfb5-37e54c82ea0b",
     "contentsName" : "작품명",
     "author" : "작가",
     "pricingType" : "FREE",
@@ -875,7 +882,7 @@ Content-Length: 107
 Host: localhost:8080
 
 {
-  "contentsToken" : "b4446e82-974a-4f6c-b83f-c6225ef21735",
+  "contentsToken" : "5821069f-1e6f-4a98-99c3-f5f157e6568f",
   "pricingType" : "PAY",
   "coin" : 100
 }</code></pre>
@@ -982,7 +989,8 @@ Host: localhost:8080
 <h3 id="_http_4"><a class="link" href="#_http_4">Http</a></h3>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /exchange/contents-token/23274d88-624e-4124-b2e8-3cd56e0ef29a HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /exchange/contents-token/65ad4edd-5f24-4e1d-92c0-700a8f816778 HTTP/1.1
+Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1063,7 +1071,96 @@ Host: localhost:8080</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
   "rt" : 200,
   "rtMsg" : "OK",
-  "contentsId" : 5173664722337383179
+  "contentsId" : 1741109774159644547
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="evaluation-delete-by-member"><a class="link" href="#evaluation-delete-by-member">평가 삭제</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_http_5"><a class="link" href="#_http_5">Http</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /delete/evaluation-by-member/e1b55cf3-85ac-4420-9677-ffe3c9c2f66a HTTP/1.1
+Authorization: accessToken
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_request_5"><a class="link" href="#_request_5">Request</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. /delete/evaluation-by-member/{memberToken}</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">필수값</th>
+<th class="tableblock halign-left valign-top">양식</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">memberToken</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 대체 식별키</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_response_5"><a class="link" href="#_response_5">Response</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수값</th>
+<th class="tableblock halign-left valign-top">양식</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rtMsg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "rt" : 200,
+  "rtMsg" : "OK"
 }</code></pre>
 </div>
 </div>
@@ -1074,7 +1171,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version <br>
-Last updated 2022-08-08 01:17:17 +0900
+Last updated 2022-08-08 10:34:34 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

@@ -9,4 +9,6 @@ import reactor.core.publisher.Mono;
 public interface MemberRepository extends ReactiveCrudRepository<Member, Long> {
 
     Mono<Member> findByMemberToken(String memberToken);
+
+    Mono<Member> findByMemberId(long memberId);
 }

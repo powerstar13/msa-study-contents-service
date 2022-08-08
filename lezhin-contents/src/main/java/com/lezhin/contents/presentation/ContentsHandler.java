@@ -99,4 +99,21 @@ public class ContentsHandler {
                     );
             });
     }
+
+    /**
+     * 평가 삭제
+     * @param serverRequest: 회원 대체 식별키
+     * @return ServerResponse: 처리 완료
+     */
+    public Mono<ServerResponse> evaluationDeleteByMember(ServerRequest serverRequest) {
+
+        String memberToken = serverRequest.pathVariable("memberToken"); // 회원 대체 식별키 추출
+        if (StringUtils.isBlank(memberToken)) throw new BadRequestException(ExceptionMessage.IsRequiredMemberToken.getMessage());
+
+        return contentsFacade.evaluationDeleteByMember(memberToken)
+            .then(
+                ok().contentType(MediaType.APPLICATION_JSON)
+                    .body(Mono.just(new SuccessResponse()), SuccessResponse.class)
+            );
+    }
 }

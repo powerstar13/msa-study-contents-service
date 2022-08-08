@@ -5,6 +5,7 @@ import com.lezhin.history.applicaiton.dto.HistoryCommandMapper;
 import com.lezhin.history.domain.service.HistoryService;
 import com.lezhin.history.domain.service.dto.HistoryDTO;
 import com.lezhin.history.infrastructure.webClient.ContentsWebClientService;
+import com.lezhin.history.infrastructure.webClient.MemberWebClientService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.UUID;
 
 import static com.lezhin.history.infrastructure.factory.HistoryTestFactory.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,6 +30,8 @@ class HistoryFacadeTest {
 
     @MockBean
     private ContentsWebClientService contentsWebClientService;
+    @MockBean
+    private MemberWebClientService memberWebClientService;
     @MockBean
     private HistoryCommandMapper historyCommandMapper;
     @MockBean
@@ -46,6 +51,22 @@ class HistoryFacadeTest {
 
         StepVerifier.create(result.log())
             .assertNext(contentsHistoryPage -> assertNotNull(contentsHistoryPage.getHistoryList()))
+            .verifyComplete();
+    }
+
+    @DisplayName("이력 삭제")
+    @Test
+    void historyDeleteByMember() {
+
+        given(memberWebClientService.exchangeMemberToken(anyString())).willReturn(exchangeMemberTokenResponseMono());
+        given(historyService.historyDeleteByMember(anyLong())).willReturn(Mono.empty());
+
+        Mono<Void> result = historyFacade.historyDeleteByMember(UUID.randomUUID().toString());
+
+        verify(memberWebClientService).exchangeMemberToken(anyString());
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
             .verifyComplete();
     }
 }

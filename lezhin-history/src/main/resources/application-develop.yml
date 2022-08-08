@@ -17,4 +17,5 @@ logging:
 
 msa:
   client-url:
+    member: http://localhost:8081 # 회원 서비스 주소
     contents: http://localhost:8082 # 작품 서비스 주소

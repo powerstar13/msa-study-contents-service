@@ -2,6 +2,7 @@ package com.lezhin.contents.infrastructure.dao;
 
 import com.lezhin.contents.application.dto.ContentsCommand;
 import com.lezhin.contents.domain.Contents;
+import com.lezhin.contents.domain.Evaluation;
 import com.lezhin.contents.domain.service.ContentsReader;
 import com.lezhin.contents.domain.service.dto.ContentsDTO;
 import com.lezhin.contents.domain.service.dto.ContentsDTOMapper;
@@ -10,6 +11,7 @@ import com.lezhin.contents.infrastructure.exception.status.ExceptionMessage;
 import com.lezhin.contents.infrastructure.exception.status.NotFoundDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -58,5 +60,26 @@ public class ContentsReaderImpl implements ContentsReader {
         return contentsRepository.findTop3ByLikeCountGreaterThanOrderByLikeCountDesc(0).collectList() // 좋아요 Top3 작품 목록
             .zipWith(contentsRepository.findTop3ByDislikeCountGreaterThanOrderByDislikeCountDesc(0).collectList()) // 싫어요 Top3 작품 목록
             .flatMap(objects -> Mono.just(contentsDTOMapper.of(objects.getT1(), objects.getT2())));
+    }
+
+    /**
+     * 회원이 평가한 목록 조회
+     * @param memberId: 회원 고유번호
+     * @return Evaluation: 평가된 목록
+     */
+    @Override
+    public Flux<Evaluation> findEvaluationListByMemberId(long memberId) {
+        return evaluationRepository.findAllByMemberId(memberId); // 1. 평가 정보 조회
+    }
+
+    /**
+     * 작품 정보 조회
+     * @param contentsId: 작품 고유번호
+     * @return Contents: 작품 레퍼런스
+     */
+    @Override
+    public Mono<Contents> findContentsByContentsId(long contentsId) {
+        return contentsRepository.findByContentsId(contentsId)
+            .switchIfEmpty(Mono.error(new NotFoundDataException(ExceptionMessage.NotFoundContents.getMessage())));
     }
 }

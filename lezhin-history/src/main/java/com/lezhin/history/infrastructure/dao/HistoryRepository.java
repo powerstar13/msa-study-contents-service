@@ -13,4 +13,6 @@ public interface HistoryRepository extends ReactiveCrudRepository<History, Long>
     Flux<History> findAllByContentsId(long contentsId, Pageable pageable);
 
     Mono<Long> countByContentsId(long contentsId);
+
+    Flux<History> findAllByMemberId(long memberId);
 }

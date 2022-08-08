@@ -40,3 +40,7 @@ include::{snippets}/history/search/page/request-parameters.adoc[]
 === Response
 include::{snippets}/history/search/page/response-fields.adoc[]
 include::{snippets}/history/search/page/response-body.adoc[]
+
+---
+
+include::{docdir}/webClient.adoc[]

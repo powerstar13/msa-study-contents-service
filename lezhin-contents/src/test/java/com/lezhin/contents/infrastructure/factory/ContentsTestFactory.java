@@ -56,7 +56,7 @@ public class ContentsTestFactory {
     /**
      * 평가 정보
      */
-    public static Evaluation evaluation() {
+    public static Evaluation evaluation(EvaluationType evaluationType) {
 
         return Evaluation.builder()
             .evaluationId(RandomUtils.nextLong())
@@ -69,7 +69,11 @@ public class ContentsTestFactory {
     }
 
     public static Mono<Evaluation> evaluationMono() {
-        return Mono.just(evaluation());
+        return Mono.just(evaluation(evaluationType));
+    }
+
+    public static Flux<Evaluation> evaluationFlux() {
+        return Flux.just(evaluation(EvaluationType.LIKE), evaluation(EvaluationType.DISLIKE));
     }
 
     public static ContentsCommand.ExchangedContentsIdForEvaluationRegister exchangedContentsIdForEvaluationRegisterCommand() {

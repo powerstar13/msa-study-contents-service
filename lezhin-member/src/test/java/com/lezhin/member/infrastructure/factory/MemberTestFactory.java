@@ -4,8 +4,10 @@ import com.lezhin.member.domain.Member;
 import com.lezhin.member.domain.MemberGender;
 import com.lezhin.member.domain.MemberType;
 import com.lezhin.member.domain.dto.MemberDTO;
+import com.lezhin.member.infrastructure.webClient.response.CommonResponse;
 import com.lezhin.member.presentation.response.ExchangeMemberTokenResponse;
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -58,5 +60,20 @@ public class MemberTestFactory {
         return ExchangeMemberTokenResponse.builder()
             .memberId(RandomUtils.nextLong())
             .build();
+    }
+
+    /**
+     * 통신 결과
+     */
+    public static CommonResponse commonResponse() {
+
+        return CommonResponse.builder()
+            .rt(HttpStatus.OK.value())
+            .rtMsg(HttpStatus.OK.getReasonPhrase())
+            .build();
+    }
+
+    public static Mono<CommonResponse> commonResponseMono() {
+        return Mono.just(commonResponse());
     }
 }

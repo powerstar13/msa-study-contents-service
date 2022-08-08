@@ -34,6 +34,7 @@ import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentUtil.r
 import static com.lezhin.contents.infrastructure.restdocs.RestdocsDocumentUtil.responsePrettyPrint;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -170,7 +171,7 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
     @Test
     void exchangeContentsToken() {
         // given
-        given(contentsFacade.exchangeContentsToken(any(String.class))).willReturn(contentsIdInfoMono());
+        given(contentsFacade.exchangeContentsToken(anyString())).willReturn(contentsIdInfoMono());
         given(contentsResponseMapper.of(any(ContentsDTO.ContentsIdInfo.class))).willReturn(exchangeContentsTokenResponse());
 
         // when
@@ -178,6 +179,7 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
         WebTestClient.ResponseSpec result = webClient
             .get()
             .uri(URI, UUID.randomUUID().toString())
+            .accept(MediaType.APPLICATION_JSON)
             .exchange();
 
         result.expectStatus().isOk()
@@ -198,7 +200,7 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
         FluxExchangeResult<ExchangeContentsTokenResponse> flux = result.returnResult(ExchangeContentsTokenResponse.class);
 
         // then
-        verify(contentsFacade).exchangeContentsToken(any(String.class));
+        verify(contentsFacade).exchangeContentsToken(anyString());
         verify(contentsResponseMapper).of(any(ContentsDTO.ContentsIdInfo.class));
 
         StepVerifier.create(flux.getResponseBody().log())
@@ -248,6 +250,45 @@ class ContentsHandlerTest extends WebFluxSharedHandlerTest {
         // then
         verify(contentsRequestMapper).of(any(PricingModifyRequest.class));
         verify(contentsFacade).pricingModify(any(ContentsCommand.PricingModify.class));
+
+        StepVerifier.create(flux.getResponseBody().log())
+            .assertNext(response -> assertEquals(HttpStatus.OK.value(), response.getRt()))
+            .verifyComplete();
+    }
+
+    @DisplayName("평가 삭제")
+    @Test
+    void evaluationDeleteByMember() {
+        // given
+        given(contentsFacade.evaluationDeleteByMember(anyString())).willReturn(Mono.empty());
+
+        // when
+        final String URI = RouterPathPattern.DELETE_EVALUATION_BY_MEMBER.getFullPath();
+        WebTestClient.ResponseSpec result = webClient
+            .delete()
+            .uri(URI, UUID.randomUUID().toString())
+            .header(AUTHORIZATION, "accessToken")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange();
+
+        result.expectStatus().isOk()
+            .expectBody()
+            .consumeWith(document(URI,
+                requestPrettyPrint(),
+                responsePrettyPrint(),
+                pathParameters(
+                    parameterWithName("memberToken").description("회원 대체 식별키")
+                ),
+                responseFields(
+                    fieldWithPath("rt").type(JsonFieldType.NUMBER).description("결과 코드"),
+                    fieldWithPath("rtMsg").type(JsonFieldType.STRING).description("결과 메시지")
+                )
+            ));
+
+        FluxExchangeResult<SuccessResponse> flux = result.returnResult(SuccessResponse.class);
+
+        // then
+        verify(contentsFacade).evaluationDeleteByMember(anyString());
 
         StepVerifier.create(flux.getResponseBody().log())
             .assertNext(response -> assertEquals(HttpStatus.OK.value(), response.getRt()))

@@ -74,11 +74,11 @@ class ContentsFacadeTest {
     @Test
     void exchangeContentsToken() {
 
-        given(contentsService.exchangeContentsToken(any(String.class))).willReturn(contentsIdInfoMono());
+        given(contentsService.exchangeContentsToken(anyString())).willReturn(contentsIdInfoMono());
 
         Mono<ContentsDTO.ContentsIdInfo> result = contentsFacade.exchangeContentsToken(UUID.randomUUID().toString());
 
-        verify(contentsService).exchangeContentsToken(any(String.class));
+        verify(contentsService).exchangeContentsToken(anyString());
 
         StepVerifier.create(result.log())
             .assertNext(contentsIdInfo -> assertTrue(contentsIdInfo.getContentsId() > 0))
@@ -95,6 +95,22 @@ class ContentsFacadeTest {
         Mono<Void> result = contentsFacade.pricingModify(command);
 
         verify(contentsService).pricingModify(any(ContentsCommand.PricingModify.class));
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
+            .verifyComplete();
+    }
+
+    @DisplayName("평가 삭제")
+    @Test
+    void evaluationDeleteByMember() {
+
+        given(memberWebClientService.exchangeMemberToken(anyString())).willReturn(exchangeMemberTokenResponseMono());
+        given(contentsService.evaluationDeleteByMember(anyLong())).willReturn(Mono.empty());
+
+        Mono<Void> result = contentsFacade.evaluationDeleteByMember(UUID.randomUUID().toString());
+
+        verify(memberWebClientService).exchangeMemberToken(anyString());
 
         StepVerifier.create(result.log())
             .expectNextCount(0)

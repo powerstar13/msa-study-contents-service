@@ -1,9 +1,9 @@
 package com.lezhin.member.domain.service;
 
-import com.lezhin.member.domain.dto.MemberDTO;
+import com.lezhin.member.domain.Member;
 import reactor.core.publisher.Mono;
 
 public interface MemberReader {
 
-    Mono<MemberDTO.MemberIdInfo> exchangeMemberToken(String memberToken);
+    Mono<Member> findByMemberToken(String memberToken);
 }

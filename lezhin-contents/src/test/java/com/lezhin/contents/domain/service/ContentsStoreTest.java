@@ -3,6 +3,7 @@ package com.lezhin.contents.domain.service;
 import com.lezhin.contents.application.dto.ContentsCommand;
 import com.lezhin.contents.domain.Contents;
 import com.lezhin.contents.domain.Evaluation;
+import com.lezhin.contents.domain.EvaluationType;
 import com.lezhin.contents.infrastructure.dao.ContentsRepository;
 import com.lezhin.contents.infrastructure.dao.EvaluationRepository;
 import org.junit.jupiter.api.Assertions;
@@ -57,6 +58,23 @@ class ContentsStoreTest {
         Mono<Void> result = contentsStore.pricingModify(contents(0, 0), command);
 
         verify(contentsRepository).save(any(Contents.class));
+
+        StepVerifier.create(result.log())
+            .expectNextCount(0)
+            .verifyComplete();
+    }
+
+    @DisplayName("평가 삭제")
+    @Test
+    void evaluationDelete() {
+
+        given(contentsRepository.save(any(Contents.class))).willReturn(contentsMono());
+        given(evaluationRepository.delete(any(Evaluation.class))).willReturn(Mono.empty());
+
+        Mono<Void> result = contentsStore.evaluationDelete(contents(1, 0), evaluation(EvaluationType.LIKE));
+
+        verify(contentsRepository).save(any(Contents.class));
+        verify(evaluationRepository).delete(any(Evaluation.class));
 
         StepVerifier.create(result.log())
             .expectNextCount(0)

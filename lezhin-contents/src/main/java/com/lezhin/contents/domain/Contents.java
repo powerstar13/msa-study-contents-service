@@ -59,12 +59,24 @@ public class Contents extends CommonDateEntity { // 작품
     public void likeUp() {
         this.likeCount += 1;
     }
+    /**
+     * 좋아요 해제
+     */
+    public void likeDown() {
+        this.likeCount -= 1;
+    }
 
     /**
      * 싫어요 추가
      */
     public void dislikeUp() {
         this.dislikeCount += 1;
+    }
+    /**
+     * 싫어요 해제
+     */
+    public void dislikeDown() {
+        this.dislikeCount -= 1;
     }
 
     /**

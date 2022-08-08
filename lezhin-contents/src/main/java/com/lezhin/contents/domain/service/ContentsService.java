@@ -13,4 +13,6 @@ public interface ContentsService {
     Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken);
 
     Mono<Void> pricingModify(ContentsCommand.PricingModify command);
+
+    Mono<Void> evaluationDeleteByMember(long memberId);
 }

@@ -1,6 +1,6 @@
 package com.lezhin.member.infrastructure.dao;
 
-import com.lezhin.member.domain.dto.MemberDTO;
+import com.lezhin.member.domain.Member;
 import com.lezhin.member.domain.service.MemberReader;
 import com.lezhin.member.infrastructure.exception.status.ExceptionMessage;
 import com.lezhin.member.infrastructure.exception.status.NotFoundDataException;
@@ -15,15 +15,13 @@ public class MemberReaderImpl implements MemberReader {
     private final MemberRepository memberRepository;
 
     /**
-     * 회원 고유번호 가져오기
+     * 회원 대체 식별키로 회원 정보 조회
      * @param memberToken: 회원 대체 식별키
-     * @return MemberIdInfo: 회원 고유번호
+     * @return Member: 회원 레퍼런스
      */
     @Override
-    public Mono<MemberDTO.MemberIdInfo> exchangeMemberToken(String memberToken) {
-
+    public Mono<Member> findByMemberToken(String memberToken) {
         return memberRepository.findByMemberToken(memberToken)
-            .switchIfEmpty(Mono.error(new NotFoundDataException(ExceptionMessage.NotFoundMember.getMessage())))
-            .flatMap(member -> Mono.just(new MemberDTO.MemberIdInfo(member.getMemberId())));
+            .switchIfEmpty(Mono.error(new NotFoundDataException(ExceptionMessage.NotFoundMember.getMessage())));
     }
 }
