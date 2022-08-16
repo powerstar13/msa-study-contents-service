@@ -21,7 +21,7 @@ public class MemberServiceImpl implements MemberService {
     public Mono<MemberDTO.MemberIdInfo> exchangeMemberToken(String memberToken) {
 
         return memberReader.findByMemberToken(memberToken) // 회원 정보 조회
-            .flatMap(member -> Mono.just(new MemberDTO.MemberIdInfo(member.getMemberId())));
+            .map(member -> new MemberDTO.MemberIdInfo(member.getMemberId()));
     }
 
     /**

@@ -7,19 +7,16 @@ import com.lezhin.history.presentation.request.ContentsHistoryPageRequest;
 import com.lezhin.history.presentation.request.ContentsHistoryRequestMapper;
 import com.lezhin.history.presentation.request.SearchHistoryPageRequest;
 import com.lezhin.history.presentation.request.SearchHistoryRequestMapper;
-import com.lezhin.history.presentation.response.ContentsHistoryPageResponse;
 import com.lezhin.history.presentation.response.HistoryResponseMapper;
-import com.lezhin.history.presentation.response.SearchHistoryPageResponse;
-import com.lezhin.history.presentation.shared.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static com.lezhin.history.presentation.shared.response.ServerResponseFactory.successBodyValue;
+import static com.lezhin.history.presentation.shared.response.ServerResponseFactory.successOnly;
 
 @Component
 @RequiredArgsConstructor
@@ -40,11 +37,8 @@ public class HistoryHandler {
         ContentsHistoryPageRequest request = contentsHistoryRequestMapper.of(serverRequest.queryParams().toSingleValueMap());
         request.verify(); // Request 유효성 검사
 
-        Mono<ContentsHistoryPageResponse> response = historyFacade.contentsHistoryPage(contentsHistoryRequestMapper.of(request))
-            .flatMap(contentsHistoryPage -> Mono.just(historyResponseMapper.of(contentsHistoryPage)));
-
-        return ok().contentType(MediaType.APPLICATION_JSON)
-            .body(response, ContentsHistoryPageResponse.class);
+        return historyFacade.contentsHistoryPage(contentsHistoryRequestMapper.of(request))
+            .flatMap(response -> successBodyValue(historyResponseMapper.of(response)));
     }
 
     /**
@@ -56,11 +50,8 @@ public class HistoryHandler {
         SearchHistoryPageRequest request = searchHistoryRequestMapper.of(serverRequest.queryParams().toSingleValueMap());
         request.verify(); // Request 유효성 검사
 
-        Mono<SearchHistoryPageResponse> response = historyFacade.searchHistoryPage(searchHistoryRequestMapper.of(request))
-            .flatMap(searchHistoryPage -> Mono.just(historyResponseMapper.of(searchHistoryPage)));
-
-        return ok().contentType(MediaType.APPLICATION_JSON)
-            .body(response, SearchHistoryPageResponse.class);
+        return historyFacade.searchHistoryPage(searchHistoryRequestMapper.of(request))
+            .flatMap(response -> successBodyValue(historyResponseMapper.of(response)));
     }
 
     /**
@@ -74,9 +65,6 @@ public class HistoryHandler {
         if (StringUtils.isBlank(memberToken)) throw new BadRequestException(ExceptionMessage.IsRequiredMemberToken.getMessage());
 
         return historyFacade.historyDeleteByMember(memberToken)
-            .then(
-                ok().contentType(MediaType.APPLICATION_JSON)
-                    .body(Mono.just(new SuccessResponse()), SuccessResponse.class)
-            );
+            .then(successOnly());
     }
 }

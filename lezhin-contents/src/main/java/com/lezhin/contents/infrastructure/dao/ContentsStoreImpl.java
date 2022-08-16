@@ -36,7 +36,7 @@ public class ContentsStoreImpl implements ContentsStore {
                 else contents.dislikeUp(); // 싫어요 추가
 
                 return contentsRepository.save(contents)
-                    .then(Mono.just(evaluation));
+                    .map(savedContents -> evaluation);
             });
     }
 

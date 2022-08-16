@@ -7,19 +7,15 @@ import com.lezhin.contents.presentation.request.ContentsRequestMapper;
 import com.lezhin.contents.presentation.request.EvaluationRegisterRequest;
 import com.lezhin.contents.presentation.request.PricingModifyRequest;
 import com.lezhin.contents.presentation.response.ContentsResponseMapper;
-import com.lezhin.contents.presentation.response.EvaluationRegisterResponse;
-import com.lezhin.contents.presentation.response.EvaluationTop3ContentsResponse;
-import com.lezhin.contents.presentation.response.ExchangeContentsTokenResponse;
-import com.lezhin.contents.presentation.shared.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static com.lezhin.contents.presentation.shared.response.ServerResponseFactory.successBodyValue;
+import static com.lezhin.contents.presentation.shared.response.ServerResponseFactory.successOnly;
 
 @Component
 @RequiredArgsConstructor
@@ -36,17 +32,14 @@ public class ContentsHandler {
      */
     public Mono<ServerResponse> evaluationRegister(ServerRequest serverRequest) {
 
-        Mono<EvaluationRegisterResponse> response = serverRequest.bodyToMono(EvaluationRegisterRequest.class)
+        return serverRequest.bodyToMono(EvaluationRegisterRequest.class)
             .switchIfEmpty(Mono.error(new BadRequestException(ExceptionMessage.IsRequiredRequest.getMessage())))
             .flatMap(request -> {
                 request.verify(); // Request 유효성 검사
 
-                return contentsFacade.evaluationRegister(contentsRequestMapper.of(request));
-            })
-            .flatMap(evaluationTokenInfo -> Mono.just(contentsResponseMapper.of(evaluationTokenInfo)));
-
-        return ok().contentType(MediaType.APPLICATION_JSON)
-            .body(response, EvaluationRegisterResponse.class);
+                return contentsFacade.evaluationRegister(contentsRequestMapper.of(request))
+                    .flatMap(response -> successBodyValue(contentsResponseMapper.of(response)));
+            });
     }
 
     /**
@@ -55,11 +48,8 @@ public class ContentsHandler {
      */
     public Mono<ServerResponse> evaluationTop3Contents(ServerRequest serverRequest) {
 
-        Mono<EvaluationTop3ContentsResponse> response = contentsFacade.evaluationTop3Contents()
-            .flatMap(evaluationTop3Contents -> Mono.just(contentsResponseMapper.of(evaluationTop3Contents)));
-
-        return ok().contentType(MediaType.APPLICATION_JSON)
-            .body(response, EvaluationTop3ContentsResponse.class);
+        return contentsFacade.evaluationTop3Contents()
+            .flatMap(response -> successBodyValue(contentsResponseMapper.of(response)));
     }
 
     /**
@@ -72,12 +62,8 @@ public class ContentsHandler {
         String contentsToken = serverRequest.pathVariable("contentsToken"); // 작품 대체 식별키 추출
         if (StringUtils.isBlank(contentsToken)) throw new BadRequestException(ExceptionMessage.IsRequiredContentsToken.getMessage());
 
-        Mono<ExchangeContentsTokenResponse> response = contentsFacade.exchangeContentsToken(contentsToken)
-            .flatMap(contentsIdInfo -> Mono.just(contentsResponseMapper.of(contentsIdInfo)));
-
-        return ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(response, ExchangeContentsTokenResponse.class);
+        return contentsFacade.exchangeContentsToken(contentsToken)
+            .flatMap(response -> successBodyValue(contentsResponseMapper.of(response)));
     }
 
     /**
@@ -93,10 +79,7 @@ public class ContentsHandler {
                 request.verify(); // Request 유효성 검사
 
                 return contentsFacade.pricingModify(contentsRequestMapper.of(request))
-                    .then(
-                        ok().contentType(MediaType.APPLICATION_JSON)
-                            .body(Mono.just(new SuccessResponse()), SuccessResponse.class)
-                    );
+                    .then(successOnly());
             });
     }
 
@@ -111,9 +94,6 @@ public class ContentsHandler {
         if (StringUtils.isBlank(memberToken)) throw new BadRequestException(ExceptionMessage.IsRequiredMemberToken.getMessage());
 
         return contentsFacade.evaluationDeleteByMember(memberToken)
-            .then(
-                ok().contentType(MediaType.APPLICATION_JSON)
-                    .body(Mono.just(new SuccessResponse()), SuccessResponse.class)
-            );
+            .then(successOnly());
     }
 }

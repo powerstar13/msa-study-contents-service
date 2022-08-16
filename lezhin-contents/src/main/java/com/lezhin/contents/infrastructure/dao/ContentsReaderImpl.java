@@ -59,7 +59,7 @@ public class ContentsReaderImpl implements ContentsReader {
 
         return contentsRepository.findTop3ByLikeCountGreaterThanOrderByLikeCountDesc(0).collectList() // 좋아요 Top3 작품 목록
             .zipWith(contentsRepository.findTop3ByDislikeCountGreaterThanOrderByDislikeCountDesc(0).collectList()) // 싫어요 Top3 작품 목록
-            .flatMap(objects -> Mono.just(contentsDTOMapper.of(objects.getT1(), objects.getT2())));
+            .map(objects -> contentsDTOMapper.of(objects.getT1(), objects.getT2()));
     }
 
     /**

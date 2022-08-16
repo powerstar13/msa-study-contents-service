@@ -31,10 +31,10 @@ public class HistoryReaderImpl implements HistoryReader {
         PageRequest pageRequest = PageRequest.of(command.getPageForPageable(), command.getSize());
 
         return historyRepository.findAllByContentsId(command.getContentsId(), pageRequest)
-            .flatMap(history -> Mono.just(contentsHistoryDTOMapper.of(history)))
+            .map(contentsHistoryDTOMapper::of)
             .collectList()
             .zipWith(historyRepository.countByContentsId(command.getContentsId()))
-            .flatMap(objects -> {
+            .map(objects -> {
                 Page<HistoryDTO.ContentsHistoryMemberInfo> contentsHistoryPage = new PageImpl<>(objects.getT1(), pageRequest, objects.getT2());
 
                 HistoryDTO.pageInfo pageInfo = HistoryDTO.pageInfo.builder() // 페이지 정보 구성
@@ -44,7 +44,7 @@ public class HistoryReaderImpl implements HistoryReader {
                     .totalPage(contentsHistoryPage.getTotalPages())
                     .build();
 
-                return Mono.just(contentsHistoryDTOMapper.of(pageInfo, contentsHistoryPage.getContent()));
+                return contentsHistoryDTOMapper.of(pageInfo, contentsHistoryPage.getContent());
             });
     }
 

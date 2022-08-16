@@ -3,18 +3,16 @@ package com.lezhin.member.presentation;
 import com.lezhin.member.applicaiton.MemberFacade;
 import com.lezhin.member.infrastructure.exception.status.BadRequestException;
 import com.lezhin.member.infrastructure.exception.status.ExceptionMessage;
-import com.lezhin.member.presentation.response.ExchangeMemberTokenResponse;
 import com.lezhin.member.presentation.response.MemberResponseMapper;
-import com.lezhin.member.presentation.shared.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
+import static com.lezhin.member.presentation.shared.response.ServerResponseFactory.successBodyValue;
+import static com.lezhin.member.presentation.shared.response.ServerResponseFactory.successOnly;
 
 @Component
 @RequiredArgsConstructor
@@ -33,12 +31,8 @@ public class MemberHandler {
         String memberToken = serverRequest.pathVariable("memberToken"); // 회원 대체 식별키 추출
         if (StringUtils.isBlank(memberToken)) throw new BadRequestException(ExceptionMessage.IsRequiredMemberToken.getMessage());
 
-        Mono<ExchangeMemberTokenResponse> response = memberFacade.exchangeMemberToken(memberToken)
-            .flatMap(memberIdInfo -> Mono.just(memberResponseMapper.of(memberIdInfo)));
-
-        return ok()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(response, ExchangeMemberTokenResponse.class);
+        return memberFacade.exchangeMemberToken(memberToken)
+            .flatMap(response -> successBodyValue(memberResponseMapper.of(response)));
     }
 
     /**
@@ -52,9 +46,6 @@ public class MemberHandler {
         if (StringUtils.isBlank(memberToken)) throw new BadRequestException(ExceptionMessage.IsRequiredMemberToken.getMessage());
 
         return memberFacade.memberDelete(memberToken)
-            .then(
-                ok().contentType(MediaType.APPLICATION_JSON)
-                    .body(Mono.just(new SuccessResponse()), SuccessResponse.class)
-            );
+            .then(successOnly());
     }
 }

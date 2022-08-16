@@ -32,7 +32,7 @@ public class ContentsServiceImpl implements ContentsService {
                 // 2. 이미 등록된 평가가 있는지 확인
                 return contentsReader.evaluationExistCheck(exchangedContentsIdForEvaluationRegister)
                     .then(contentsStore.evaluationRegister(contents, exchangedContentsIdForEvaluationRegister) // 3. 평가 등록
-                        .flatMap(evaluation -> Mono.just(new ContentsDTO.EvaluationTokenInfo(evaluation.getEvaluationToken())))
+                        .map(evaluation -> new ContentsDTO.EvaluationTokenInfo(evaluation.getEvaluationToken()))
                     );
             });
     }
@@ -55,7 +55,7 @@ public class ContentsServiceImpl implements ContentsService {
     public Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken) {
 
         return contentsReader.findByContentsToken(contentsToken)
-            .flatMap(contents -> Mono.just(new ContentsDTO.ContentsIdInfo(contents.getContentsId())));
+            .map(contents -> new ContentsDTO.ContentsIdInfo(contents.getContentsId()));
     }
 
     /**
