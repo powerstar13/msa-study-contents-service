@@ -47,8 +47,6 @@ class ContentsServiceTest {
 
         Mono<ContentsDTO.EvaluationTokenInfo> result = contentsService.evaluationRegister(command);
 
-        verify(contentsReader).findByContentsToken(anyString());
-
         StepVerifier.create(result.log())
             .assertNext(evaluationTokenInfo -> assertNotNull(evaluationTokenInfo.getEvaluationToken()))
             .verifyComplete();
@@ -61,8 +59,6 @@ class ContentsServiceTest {
         given(contentsReader.evaluationTop3Contents()).willReturn(evaluationTop3ContentsDTOMono());
 
         Mono<ContentsDTO.EvaluationTop3Contents> result = contentsService.evaluationTop3Contents();
-
-        verify(contentsReader).evaluationTop3Contents();
 
         StepVerifier.create(result.log())
             .assertNext(evaluationTop3Contents -> assertAll(() -> {
@@ -80,8 +76,6 @@ class ContentsServiceTest {
 
         Mono<ContentsDTO.ContentsIdInfo> result = contentsService.exchangeContentsToken(UUID.randomUUID().toString());
 
-        verify(contentsReader).findByContentsToken(anyString());
-
         StepVerifier.create(result.log())
             .assertNext(contentsIdInfo -> assertTrue(contentsIdInfo.getContentsId() > 0))
             .verifyComplete();
@@ -97,8 +91,6 @@ class ContentsServiceTest {
 
         Mono<Void> result = contentsService.pricingModify(command);
 
-        verify(contentsReader).findByContentsToken(anyString());
-
         StepVerifier.create(result.log())
             .expectNextCount(0)
             .verifyComplete();
@@ -113,8 +105,6 @@ class ContentsServiceTest {
         given(contentsStore.evaluationDelete(any(Contents.class), any(Evaluation.class))).willReturn(Mono.empty());
 
         Mono<Void> result = contentsService.evaluationDeleteByMember(RandomUtils.nextLong());
-
-        verify(contentsReader).findEvaluationListByMemberId(anyLong());
 
         StepVerifier.create(result.log())
             .expectNextCount(0)

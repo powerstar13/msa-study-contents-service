@@ -36,8 +36,6 @@ class HistoryServiceTest {
 
         Mono<HistoryDTO.ContentsHistoryPage> result = historyService.contentsHistoryPage(exchangedContentsHistoryPageCommand());
 
-        verify(historyReader).findAllContentsHistoryPage(any(HistoryCommand.ExchangedContentsHistoryPage.class));
-
         StepVerifier.create(result.log())
             .assertNext(contentsHistoryPage -> assertNotNull(contentsHistoryPage.getHistoryList()))
             .verifyComplete();
@@ -50,8 +48,6 @@ class HistoryServiceTest {
         given(historyReader.findAllSearchHistoryPage(any(HistoryCommand.SearchHistoryPage.class))).willReturn(searchHistoryPageDTOMono());
 
         Mono<HistoryDTO.SearchHistoryPage> result = historyService.searchHistoryPage(searchHistoryPageCommand());
-
-        verify(historyReader).findAllSearchHistoryPage(any(HistoryCommand.SearchHistoryPage.class));
 
         StepVerifier.create(result.log())
             .assertNext(searchHistoryPage -> assertNotNull(searchHistoryPage.getMemberList()))
@@ -66,8 +62,6 @@ class HistoryServiceTest {
         given(historyStore.historyListDelete(anyList())).willReturn(Mono.empty());
 
         Mono<Void> result = historyService.historyDeleteByMember(RandomUtils.nextLong());
-
-        verify(historyReader).findHistoryListByMemberId(anyLong());
 
         StepVerifier.create(result.log())
             .expectNextCount(0)

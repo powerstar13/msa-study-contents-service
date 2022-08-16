@@ -3,6 +3,7 @@ package com.lezhin.member.domain.service;
 import com.lezhin.member.domain.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -18,6 +19,7 @@ public class MemberServiceImpl implements MemberService {
      * @return MemberIdInfo: 회원 고유번호
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Mono<MemberDTO.MemberIdInfo> exchangeMemberToken(String memberToken) {
 
         return memberReader.findByMemberToken(memberToken) // 회원 정보 조회
@@ -29,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
      * @param memberToken: 회원 대체 식별키
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Mono<Void> memberDelete(String memberToken) {
 
         return memberReader.findByMemberToken(memberToken) // 1. 회원 정보 조회

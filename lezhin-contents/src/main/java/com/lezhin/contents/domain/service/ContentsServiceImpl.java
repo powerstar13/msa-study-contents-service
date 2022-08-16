@@ -5,6 +5,7 @@ import com.lezhin.contents.application.dto.ContentsCommandMapper;
 import com.lezhin.contents.domain.service.dto.ContentsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -21,6 +22,7 @@ public class ContentsServiceImpl implements ContentsService {
      * @return EvaluationTokenInfo: 평가 대체 식별키
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Mono<ContentsDTO.EvaluationTokenInfo> evaluationRegister(ContentsCommand.ExchangedMemberIdForEvaluationRegister command) {
 
         // 1. 작품 정보 조회
@@ -42,6 +44,7 @@ public class ContentsServiceImpl implements ContentsService {
      * @return EvaluationTop3Contents: 좋아요/싫어요 Top3 작품 정보
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Mono<ContentsDTO.EvaluationTop3Contents> evaluationTop3Contents() {
         return contentsReader.evaluationTop3Contents(); // 좋아요/싫어요 Top3 작품 조회
     }
@@ -52,6 +55,7 @@ public class ContentsServiceImpl implements ContentsService {
      * @return ContentsIdInfo: 작품 고유번호
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Mono<ContentsDTO.ContentsIdInfo> exchangeContentsToken(String contentsToken) {
 
         return contentsReader.findByContentsToken(contentsToken)
@@ -63,6 +67,7 @@ public class ContentsServiceImpl implements ContentsService {
      * @param command: 변경할 가격 정보
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Mono<Void> pricingModify(ContentsCommand.PricingModify command) {
 
         return contentsReader.findByContentsToken(command.getContentsToken()) // 1. 작품 정보 조회
@@ -76,6 +81,7 @@ public class ContentsServiceImpl implements ContentsService {
      * @param memberId: 회원 고유번호
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Mono<Void> evaluationDeleteByMember(long memberId) {
 
         return contentsReader.findEvaluationListByMemberId(memberId) // 1. 평가 목록 조회

@@ -4,6 +4,7 @@ import com.lezhin.history.applicaiton.dto.HistoryCommand;
 import com.lezhin.history.domain.service.dto.HistoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -19,6 +20,7 @@ public class HistoryServiceImpl implements HistoryService {
      * @return HistoryPage: 이력 페이지
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Mono<HistoryDTO.ContentsHistoryPage> contentsHistoryPage(HistoryCommand.ExchangedContentsHistoryPage command) {
         return historyReader.findAllContentsHistoryPage(command); // 작품별 조회 이력 페이지 조회
     }
@@ -29,6 +31,7 @@ public class HistoryServiceImpl implements HistoryService {
      * @return HistoryPage: 이력 페이지
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Mono<HistoryDTO.SearchHistoryPage> searchHistoryPage(HistoryCommand.SearchHistoryPage command) {
         return historyReader.findAllSearchHistoryPage(command); // 사용자 조회 이력 페이지 조회
     }
@@ -38,6 +41,7 @@ public class HistoryServiceImpl implements HistoryService {
      * @param memberId: 회원 고유번호
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Mono<Void> historyDeleteByMember(long memberId) {
 
         return historyReader.findHistoryListByMemberId(memberId) // 1. 이력 목록 조회

@@ -38,8 +38,6 @@ class MemberServiceTest {
 
         Mono<MemberDTO.MemberIdInfo> result = memberService.exchangeMemberToken(UUID.randomUUID().toString());
 
-        verify(memberReader).findByMemberToken(anyString());
-
         StepVerifier.create(result.log())
             .assertNext(memberIdInfo -> assertTrue(memberIdInfo.getMemberId() > 0))
             .verifyComplete();
@@ -53,8 +51,6 @@ class MemberServiceTest {
         given(memberStore.memberDelete(any(Member.class))).willReturn(Mono.empty());
 
         Mono<Void> result = memberService.memberDelete(UUID.randomUUID().toString());
-
-        verify(memberReader).findByMemberToken(anyString());
 
         StepVerifier.create(result.log())
             .expectNextCount(0)
