@@ -1,0 +1,38 @@
+spring:
+  config:
+    activate:
+      on-profile: develop
+
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 3000
+        response-timeout: 3s
+      routes: # filter 설정
+        - id: API Server for member
+          uri: http://localhost:8081/
+          predicates: # 조건절
+            - Path=/member/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - JwtAuthVerifyFilter
+
+        - id: API Server for contents
+          uri: http://localhost:8082/
+          predicates: # 조건절
+            - Path=/contents/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - JwtAuthVerifyFilter
+
+        - id: API Server for history
+          uri: http://localhost:8083/
+          predicates: # 조건절
+            - Path=/history/**
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - JwtAuthVerifyFilter
+
+logging:
+  level:
+    root: INFO

@@ -1,7 +1,5 @@
 # 📚 웹툰 서비스 플랫폼
 
-`레진엔터테인먼트 과제`
-
 ---
 
 # 🔧 환경 구성
@@ -20,19 +18,19 @@
 1. API Gateway 실행
     ```shell
     # 여기서 `./`은 README 경로 위치를 기준으로 작성함
-    java -jar ./out/lezhin-gateway.jar
+    java -jar ./out/webtoon-gateway.jar
     ```
 2. 회원 서비스 실행
     ```shell
-    java -jar ./out/lezhin-member.jar
+    java -jar ./out/webtoon-member.jar
     ```
 3. 작품 서비스 실행
     ```shell
-    java -jar ./out/lezhin-contents.jar
+    java -jar ./out/webtoon-contents.jar
     ```
 4. 이력 서비스 실행
     ```shell
-    java -jar ./out/lezhin-history.jar
+    java -jar ./out/webtoon-history.jar
     ```
 
 ## ❤️ IntelliJ를 사용할 경우
@@ -57,14 +55,14 @@
 
 # 💡 마이크로서비스 모델링
 
-![마이크로서비스 모델링](./public/lezhin-assignment-domain-model.png)
+![마이크로서비스 모델링](./public/webtoon-domain-model.png)
 
 # 💠 ERD 설계
 
-![ERD 설계](./public/lezhin-assignment-erd.png)
+![ERD 설계](./public/webtoon-erd.png)
 
 # 🏭 시스템 아키텍처
 
-![시스템 아키텍처](./public/lezhin-assignment-system-architecture.png)
+![시스템 아키텍처](./public/webtoon-system-architecture.png)
 
 ---
